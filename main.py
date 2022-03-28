@@ -227,9 +227,8 @@ def dataframe():
     datafreim_legal["inseguro"] = datafreim_legal["cookies"] + datafreim_legal["aviso"] + datafreim_legal[
         "proteccion_de_datos"]
     datafreim_legal = datafreim_legal.dropna(axis=1)
-    dataframe_legal = datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
+    datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
     paginas_inseguras = datafreim_legal.head(5)
-    paginas_inseguras = paginas_inseguras.drop(columns=["inseguro"])
     # paginas_inseguras["url"] = paginas_inseguras.loc[[], "url"]
     print(paginas_inseguras)
 
@@ -261,17 +260,65 @@ def dataframe():
     # print(dict_hashes)
     diccionario.close()
 
-    query_userpass = pd.read_sql_query('SELECT name, contrasena FROM users', con)
-    datafreim_userpass = pd.DataFrame(query_userpass, columns=["name", "contrasena"])
+    datafreim_userpass = original
+    print(datafreim_userpass)
     datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(dict_hashes)) * 1
     print(datafreim_userpass)
 
-    # MOSTRAR 10 USUARIOS MÁS CRÍTICOS
+    # dataframes de usuarios comprometidos  / no comprometidos
+    comprometidos = datafreim_userpass[datafreim_userpass.segura == 1]
+    nocomprometidos = datafreim_userpass[datafreim_userpass.segura == 0]
 
-    # MEDIA DE CONEXIONES CON CONTRASEÑA VULNERABLE VS NO VULN
+    # ----- 10 USUARIOS MÁS CRÍTICOS -----
+    # query = pd.read_sql_query(
+    #     'SELECT u.*, i.ip, i.fecha, e.total, e.phising, e.clicados FROM users u JOIN ips i ON u.name=i.name '
+    #     'JOIN emails e ON u.name=e.name', con, "name")
+    # datafreim = pd.DataFrame(query,
+    #                          columns=["name", "telefono", "contrasena", "provincia", "permisos", "ip", "fecha", "total",
+    #                                   "phising", "clicados"])
+    #
+    # datafreim = datafreim.drop("name", axis=1)
+    # print(datafreim)
+    # original = datafreim.groupby(["name"], dropna=False).agg(
+    #     {"fecha": np.array, "ip": np.array, "telefono": "first", "contrasena": "first", "provincia": "first",
+    #      "permisos": "first", "total": "first", "phising": "first", "clicados": "first"})
+    #
+    print("USUARIOS CRITICOS")
+    comprometidos["prob-clic"] = comprometidos["clicados"] / comprometidos["phising"]
+    criticos = comprometidos
+    criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
+    criticos = criticos.head(10)
+    print(criticos)
+    fig = px.bar(criticos, x=criticos.index, y='prob-clic')
+    fig.show()
 
-    # NUMERO DE CONTRASEÑAS COMPROMETIDAS / NO COMPROMETIDAS comprometidas = datafreim_userpass.groupby([
-    # "creacion"]).agg(  {"inseguro": "sum", "seguro": "sum", "url": "first", "creacion": "first"})
+
+
+    # ----- MEDIA DE CONEXIONES CON CONTRASEÑA VULNERABLE VS NO VULN -----
+    print("CONEXIONES")
+    conexionesvuln = datafreim_userpass
+    conexionesvuln["segura"] = conexionesvuln["segura"] == 1
+    conexionesvuln["num_conexiones"] = conexionesvuln["ip"].size
+    conexionesvuln = conexionesvuln.groupby(["segura"]).agg({"segura": "first", "num_conexiones": "sum"})
+    print(conexionesvuln)
+    fig = px.bar(conexionesvuln, x='segura', y='num_conexiones', title='Media de conexiones')
+    fig.show()
+
+
+    # ----- NUMERO DE CONTRASEÑAS COMPROMETIDAS / NO COMPROMETIDAS -----
+    datafreim_contrasenas = datafreim_userpass.drop(
+        columns=["fecha", "telefono", "ip", "provincia", "permisos", "total", "phising", "clicados"])
+    datafreim_contrasenas["numero"] = datafreim_contrasenas["segura"]
+    datafreim_contrasenas["segura"] = datafreim_contrasenas["segura"] == 0
+    print(datafreim_contrasenas)
+
+    comp_y_nocomp = datafreim_contrasenas.groupby(["segura"]).agg({"segura": "first", "numero": "size"})
+    print(comp_y_nocomp)
+    # print(nocomprometidas)
+
+    fig = px.pie(comp_y_nocomp, values='numero', names='segura',
+                 title='Número de contraseñas comprometidas vs no comprometidas')
+    fig.show()
 
     con.close()
     return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
