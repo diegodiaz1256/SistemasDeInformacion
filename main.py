@@ -8,6 +8,7 @@ import plotly.express as px
 
 app = Flask(__name__)
 
+
 ###### CREACIÓN DE TABLAS PARA LA BASE DE DATOS ######
 @app.route('/')
 def hello():
@@ -30,10 +31,6 @@ def hello():
     cur.close()
     return "<p>Hello World! Accede a /dataframe para ver los datos y gráficos.</p>"
 
-@app.route('/hello')
-@app.route('/hello/<name>')
-def helloname(name=None):
-    return "<p>Hello " + name + "</p>"
 
 # ------------- EJERCICIO 2 -------------
 ###### LECTURA DE DATOS JSON PARA LA INICIALIZACIÓN DE LA BASE DE DATOS ######
@@ -112,7 +109,7 @@ def dataframe():
                                       "phising", "clicados"])
 
     datafreim = datafreim.drop("name", axis=1)
-    #print(datafreim)
+    # print(datafreim)
 
     # Dataframe "original" con una fila por usuario, con los datos bidimensionales (IPs, Fechas) cargados como arrays
     original = datafreim.groupby(["name"], dropna=False).agg(
@@ -157,7 +154,6 @@ def dataframe():
     }
     ejer2 = DotMap(ejer2)
 
-
     # ------------- EJERCICIO 3 -------------
     # Creamos las 4 agrupaciones
     usuariosperm = original.loc[original.permisos == "False", ['total', 'phising', 'clicados']]
@@ -165,10 +161,10 @@ def dataframe():
     mayor200 = original.loc[original.total >= 200, ['total', 'phising', 'clicados']]
     menor200 = original.loc[original.total < 200, ['total', 'phising', 'clicados']]
 
-    #print(usuariosperm)
-    #print(adminperm)
-    #print(mayor200)
-    #print(menor200)
+    # print(usuariosperm)
+    # print(adminperm)
+    # print(mayor200)
+    # print(menor200)
 
     # Cálculos para usuarios
     usuariosperm_num = usuariosperm.shape[0]
@@ -203,7 +199,7 @@ def dataframe():
     menor200f_min = menor200.min()["phising"]
 
     # DotMap para representación organizada en web
-        # Tomamos como premisa que no existen valores ausentes, ya que han sido eliminados durante la creación del Dataframe
+    # Tomamos como premisa que no existen valores ausentes, ya que han sido eliminados durante la creación del Dataframe
     ejer3 = {
         "usuario_observaciones": usuariosperm_num,
         "usuario_ausentes": 0,
@@ -236,13 +232,12 @@ def dataframe():
     }
     ejer3 = DotMap(ejer3)
 
-
     # ------------- EJERCICIO 4 -------------
 
     # Dataframe datos de legal
     query_legal = pd.read_sql_query('SELECT url, cookies, aviso, proteccion_de_datos, creacion FROM legal', con)
     datafreim_legal = pd.DataFrame(query_legal, columns=["url", "cookies", "aviso", "proteccion_de_datos", "creacion"])
-    #print(datafreim_legal)
+    # print(datafreim_legal)
 
     # ----- 4.2 PAGINAS WEB CON POLITICAS DESACTUALIZADAS -------
     datafreim_legal["inseguro"] = datafreim_legal["cookies"] + datafreim_legal["aviso"] + datafreim_legal[
@@ -250,7 +245,7 @@ def dataframe():
     datafreim_legal = datafreim_legal.dropna(axis=1)
     datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
     paginas_inseguras = datafreim_legal.head(5)
-    #print(paginas_inseguras)
+    # print(paginas_inseguras)
     grafico_paginas = px.bar(paginas_inseguras, x="url", y=["cookies", "aviso", "proteccion_de_datos"],
                              title="Páginas con políticas desactualizadas")
     grafico_paginas.show()
@@ -260,11 +255,11 @@ def dataframe():
     # Si son inseguros = 1, si son seguros = 0
     politicas["inseguro"] = (politicas["inseguro"] < 3) * 1
     politicas["seguro"] = (politicas["inseguro"] == 0) * 1
-    #print(politicas)
+    # print(politicas)
     politicas = politicas.drop(columns=["cookies", "aviso", "proteccion_de_datos"])
     politicas = politicas.groupby(["creacion"]).agg(
         {"inseguro": "sum", "seguro": "sum", "url": "first", "creacion": "first"})
-    #print(politicas)
+    # print(politicas)
 
     fig = px.line(politicas, x="creacion", y="inseguro", title="Nº de webs inseguras")
     fig.show()
@@ -278,9 +273,9 @@ def dataframe():
     diccionario.close()
 
     datafreim_userpass = original
-    #print(datafreim_userpass)
+    # print(datafreim_userpass)
     datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(dict_hashes)) * 1
-    #print(datafreim_userpass)
+    # print(datafreim_userpass)
 
     # Dataframes de usuarios comprometidos  / no comprometidos
     comprometidos = datafreim_userpass[datafreim_userpass.segura == 1]
@@ -291,30 +286,28 @@ def dataframe():
     criticos = comprometidos
     criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
     criticos = criticos.head(10)
-    #print(criticos)
+    # print(criticos)
     fig = px.bar(criticos, x=criticos.index, y='prob-clic', title="Top 10 usuarios más críticos")
     fig.show()
-
 
     # ----- 4.3 MEDIA DE CONEXIONES CON CONTRASEÑA VULNERABLE VS NO VULNERABLE -----
     conexionesvuln = datafreim_userpass
     conexionesvuln["segura"] = conexionesvuln["segura"] == 1
     conexionesvuln["num_conexiones"] = conexionesvuln["ip"].size
     conexionesvuln = conexionesvuln.groupby(["segura"]).agg({"segura": "first", "num_conexiones": "sum"})
-    #print(conexionesvuln)
+    # print(conexionesvuln)
     fig = px.bar(conexionesvuln, x='segura', y='num_conexiones', title='Media de conexiones')
     fig.show()
-
 
     # ----- 4.5 NUMERO DE CONTRASEÑAS COMPROMETIDAS / NO COMPROMETIDAS -----
     datafreim_contrasenas = datafreim_userpass.drop(
         columns=["fecha", "telefono", "ip", "provincia", "permisos", "total", "phising", "clicados"])
     datafreim_contrasenas["numero"] = datafreim_contrasenas["segura"]
     datafreim_contrasenas["segura"] = datafreim_contrasenas["segura"] == 0
-    #print(datafreim_contrasenas)
+    # print(datafreim_contrasenas)
 
     comp_y_nocomp = datafreim_contrasenas.groupby(["segura"]).agg({"segura": "first", "numero": "size"})
-    #print(comp_y_nocomp)
+    # print(comp_y_nocomp)
 
     fig = px.pie(comp_y_nocomp, values='numero', names='segura',
                  title='Número de contraseñas comprometidas vs no comprometidas')
@@ -325,4 +318,3 @@ def dataframe():
 
 
 app.run(debug=True)
-
