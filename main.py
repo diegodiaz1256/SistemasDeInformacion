@@ -1,15 +1,13 @@
-# This is a sample Python script.
 import numpy as np
 from dotmap import DotMap
 from flask import Flask, render_template
 import sqlite3
 import json
 import pandas as pd
+import plotly.express as px
+import hashlib
 
 app = Flask(__name__)
-
-
-# cur.execute('CREATE TABLE IF NOT EXISTS usuario(name text, age number )')
 
 
 @app.route('/')
@@ -50,9 +48,9 @@ def func():
     # print(data)
     for entry in data["legal"]:
         url = list(entry.keys())[0]
-        cookies = entry[url]["cookies"] == 1
-        aviso = entry[url]["aviso"] == 1
-        proteccion_de_datos = entry[url]["proteccion_de_datos"] == 1
+        cookies = int(entry[url]["cookies"])
+        aviso = int(entry[url]["aviso"])
+        proteccion_de_datos = int(entry[url]["proteccion_de_datos"])
         creacion = entry[url]["creacion"]
         cur.execute(
             'INSERT INTO legal VALUES("{}", "{}", "{}", "{}", "{}")'.format(url, cookies, aviso, proteccion_de_datos,
@@ -109,7 +107,7 @@ def dataframe():
     datafreim = pd.DataFrame(query,
                              columns=["name", "telefono", "contrasena", "provincia", "permisos", "ip", "fecha", "total",
                                       "phising", "clicados"])
-    print(datafreim)
+
     datafreim = datafreim.drop("name", axis=1)
     print(datafreim)
     original = datafreim.groupby(["name"], dropna=False).agg(
@@ -135,7 +133,7 @@ def dataframe():
     minemails = emails.min()["total"]
 
     ejer2 = {
-        "mediafecha": round(mediafecha,2),
+        "mediafecha": round(mediafecha, 2),
         "desviacionfecha": round(desviacionfecha, 2),
         "mediaips": round(mediaips, 2),
         "desviacionips": round(desviacionips, 2),
@@ -158,76 +156,129 @@ def dataframe():
     print(mayor200)
     print(menor200)
     usuariosperm_num = usuariosperm.shape[0]
-    # usuariosperm_nan = usuariosperm.
-    usuariosperm_mediana = usuariosperm.median()["total"]
-    usuariosperm_media = usuariosperm.mean()["total"]
-    usuariosperm_varianza = usuariosperm.var()["total"]
-    usuariosperm_max = usuariosperm.max()["total"]
-    usuariosperm_min = usuariosperm.min()["total"]
+    # usuariosperm_nan = usuariosperm
+    usuariosperm_mediana = usuariosperm.median()["phising"]
+    usuariosperm_media = usuariosperm.mean()["phising"]
+    usuariosperm_varianza = usuariosperm.var()["phising"]
+    usuariosperm_max = usuariosperm.max()["phising"]
+    usuariosperm_min = usuariosperm.min()["phising"]
 
     adminperm_num = adminperm.shape[0]
     # usuariosperm_nan = usuariosperm
-    adminperm_mediana = adminperm.median()["total"]
-    adminperm_media = adminperm.mean()["total"]
-    adminperm_varianza = adminperm.var()["total"]
-    adminperm_max = adminperm.max()["total"]
-    adminperm_min = adminperm.min()["total"]
+    adminperm_mediana = adminperm.median()["phising"]
+    adminperm_media = adminperm.mean()["phising"]
+    adminperm_varianza = adminperm.var()["phising"]
+    adminperm_max = adminperm.max()["phising"]
+    adminperm_min = adminperm.min()["phising"]
 
     mayor200f_num = mayor200.shape[0]
     # usuariosperm_nan = usuariosperm
-    mayor200f_mediana = mayor200.median()["total"]
-    mayor200f_media = mayor200.mean()["total"]
-    mayor200f_varianza = mayor200.var()["total"]
-    mayor200f_max = mayor200.max()["total"]
-    mayor200f_min = mayor200.min()["total"]
+    mayor200f_mediana = mayor200.median()["phising"]
+    mayor200f_media = mayor200.mean()["phising"]
+    mayor200f_varianza = mayor200.var()["phising"]
+    mayor200f_max = mayor200.max()["phising"]
+    mayor200f_min = mayor200.min()["phising"]
 
     menor200f_num = menor200.shape[0]
     # usuariosperm_nan = usuariosperm
-    menor200f_mediana = menor200.median()["total"]
-    menor200f_media = menor200.mean()["total"]
-    menor200f_varianza = menor200.var()["total"]
-    menor200f_max = menor200.max()["total"]
-    menor200f_min = menor200.min()["total"]
-    con.close()
+    menor200f_mediana = menor200.median()["phising"]
+    menor200f_media = menor200.mean()["phising"]
+    menor200f_varianza = menor200.var()["phising"]
+    menor200f_max = menor200.max()["phising"]
+    menor200f_min = menor200.min()["phising"]
 
     ejer3 = {
-        "usuario_observaciones" : usuariosperm_num,
-        "usuario_ausentes" : -1,
-        "usuario_mediana" : round(usuariosperm_mediana, 2),
-        "usuario_media" : round(usuariosperm_media,2),
-        "usuario_varianza" : round(usuariosperm_varianza,2),
-        "usuario_max" : usuariosperm_max,
-        "usuario_min" : usuariosperm_min,
-        "admin_observaciones" : adminperm_num,
-        "admin_ausentes" : -1,
-        "admin_mediana" : round(adminperm_mediana,2),
-        "admin_media" : round(adminperm_media,2),
-        "admin_varianza" : round(adminperm_varianza, 2),
-        "admin_max" : adminperm_max,
-        "admin_min" : adminperm_min,
-        "mayor200_observaciones" : round(mayor200f_num,2),
-        "mayor200_ausentes" : -1,
-        "mayor200_mediana" : round(mayor200f_mediana,2),
-        "mayor200_media" : round(mayor200f_media,2),
-        "mayor200_varianza" : round(mayor200f_varianza,2),
-        "mayor200_max" : mayor200f_max,
-        "mayor200_min" : mayor200f_min,
-        "menor200_observaciones" : menor200f_num,
-        "menor200_ausentes" : -1,
-        "menor200_mediana" : round(menor200f_mediana, 2),
-        "menor200_media" : round(menor200f_media, 2),
-        "menor200_varianza" : round(menor200f_varianza, 2),
-        "menor200_max" : menor200f_max,
-        "menor200_min" : menor200f_min
+        "usuario_observaciones": usuariosperm_num,
+        "usuario_ausentes": -1,
+        "usuario_mediana": round(usuariosperm_mediana, 2),
+        "usuario_media": round(usuariosperm_media, 2),
+        "usuario_varianza": round(usuariosperm_varianza, 2),
+        "usuario_max": usuariosperm_max,
+        "usuario_min": usuariosperm_min,
+        "admin_observaciones": adminperm_num,
+        "admin_ausentes": -1,
+        "admin_mediana": round(adminperm_mediana, 2),
+        "admin_media": round(adminperm_media, 2),
+        "admin_varianza": round(adminperm_varianza, 2),
+        "admin_max": adminperm_max,
+        "admin_min": adminperm_min,
+        "mayor200_observaciones": round(mayor200f_num, 2),
+        "mayor200_ausentes": -1,
+        "mayor200_mediana": round(mayor200f_mediana, 2),
+        "mayor200_media": round(mayor200f_media, 2),
+        "mayor200_varianza": round(mayor200f_varianza, 2),
+        "mayor200_max": mayor200f_max,
+        "mayor200_min": mayor200f_min,
+        "menor200_observaciones": menor200f_num,
+        "menor200_ausentes": -1,
+        "menor200_mediana": round(menor200f_mediana, 2),
+        "menor200_media": round(menor200f_media, 2),
+        "menor200_varianza": round(menor200f_varianza, 2),
+        "menor200_max": menor200f_max,
+        "menor200_min": menor200f_min
     }
     ejer3 = DotMap(ejer3)
 
+    print("--------- EJERCICIO 4 ----------")
+
+    # ----- PAGINAS WEB CON POLITICAS DESACTUALIZADAS -------
+    query_legal = pd.read_sql_query('SELECT url, cookies, aviso, proteccion_de_datos, creacion FROM legal', con)
+    datafreim_legal = pd.DataFrame(query_legal, columns=["url", "cookies", "aviso", "proteccion_de_datos", "creacion"])
+
+    print(datafreim_legal)
+    datafreim_legal["inseguro"] = datafreim_legal["cookies"] + datafreim_legal["aviso"] + datafreim_legal[
+        "proteccion_de_datos"]
+    datafreim_legal = datafreim_legal.dropna(axis=1)
+    dataframe_legal = datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
+    paginas_inseguras = datafreim_legal.head(5)
+    paginas_inseguras = paginas_inseguras.drop(columns=["inseguro"])
+    # paginas_inseguras["url"] = paginas_inseguras.loc[[], "url"]
+    print(paginas_inseguras)
+
+    grafico_paginas = px.bar(paginas_inseguras, x="url", y=["cookies", "aviso", "proteccion_de_datos"],
+                             title="Páginas con políticas desactualizadas")
+    grafico_paginas.show()
+
+    # ----- MOSTRAR SEGÚN AÑO WEBS QUE CUMPLEN POLITICA PRIVACIDAD VS NO -------
+    politicas = datafreim_legal
+    # Si son inseguros = 1, si son seguros = 0
+    politicas["inseguro"] = (politicas["inseguro"] < 3) * 1
+    politicas["seguro"] = (politicas["inseguro"] == 0) * 1
+    print("seguro o inseguro")
+    print(politicas)
+    politicas = politicas.drop(columns=["cookies", "aviso", "proteccion_de_datos"])
+    politicas = politicas.groupby(["creacion"]).agg(
+        {"inseguro": "sum", "seguro": "sum", "url": "first", "creacion": "first"})
+    print(politicas)
+
+    fig = px.line(politicas, x="creacion", y="inseguro", title="Nº de webs inseguras")
+    fig.show()
+    fig = px.line(politicas, x="creacion", y="seguro", title="Nº de webs seguras")
+    fig.show()
+
+    # SEPARAMOS POR CONTRASEÑAS VULNERADAS
+
+    diccionario = open("data/diccionario.txt", "r")
+    dict_hashes = diccionario.read().split("\n")
+    # print(dict_hashes)
+    diccionario.close()
+
+    query_userpass = pd.read_sql_query('SELECT name, contrasena FROM users', con)
+    datafreim_userpass = pd.DataFrame(query_userpass, columns=["name", "contrasena"])
+    datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(dict_hashes))*1
+    print(datafreim_userpass)
+
+    # MOSTRAR 10 USUARIOS MÁS CRÍTICOS
+
+    # MEDIA DE CONEXIONES CON CONTRASEÑA VULNERABLE VS NO VULN
+
+    # NUMERO DE CONTRASEÑAS COMPROMETIDAS / NO COMPROMETIDAS
+    #comprometidas = datafreim_userpass.groupby(["creacion"]).agg(  {"inseguro": "sum", "seguro": "sum", "url": "first", "creacion": "first"})
+
+
+
+    con.close()
     return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
-    # return "<h1>Ejercicio 2:</h1><p>Numero de usuarios = " + str(usuarios) + \
-    #        "<br>Fecha:<ul><li>Media = "+str(mediafecha)+"</li><li>Desviacion = "\
-    #        +str(desviacionfecha)+"</li><li>Maximo = "+str(maxfecha)+"</li><li>Minimo = "+str(minfecha)+"</li></ul>IPs:<ul><li>Media = "+str(mediaips)+"</li><li>Desviacion = "\
-    #        +str(desviacionips)+"</li></ul>Emails:<ul><li>Media = "+str(mediaemails)+"</li><li>Desviacion = "+str(desviacionemails)+"</li><li>Maximo = "\
-    #        +str(maxemails)+"</li><li>Minimo = "+str(minemails)+"</li></ul></p><h1>Ejercicio 3:</h1>"
 
 
 # Press the green button in the gutter to run the script.
