@@ -312,6 +312,8 @@ def dataframe():
     fig = px.pie(comp_y_nocomp, values='numero', names='segura',
                  title='Número de contraseñas comprometidas vs no comprometidas')
     fig.show()
+
+
     #### --------- PRÁCTICA 2 EJERCICIO 2 -------- ####
     print(criticos)
     top5criticos = criticos.head(5)
@@ -320,8 +322,20 @@ def dataframe():
     listaTop5Criticos = list(top5criticos.index)
     print(listaTop5Criticos)
 
+    print(datafreim_legal)
+    top5pagcriticas = datafreim_legal.head(5)
+    print(top5pagcriticas)
 
-    # top5pagcriticas
+    listaTop5PagCriticas = list(top5pagcriticas["url"])
+    print(listaTop5PagCriticas)
+
+    listaTop5Criticos = {
+        "usuarios": listaTop5Criticos,
+        "paginas": listaTop5PagCriticas
+    }
+
+    listaTop5Criticos = DotMap(listaTop5Criticos)
+
     con.close()
     return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos)
 

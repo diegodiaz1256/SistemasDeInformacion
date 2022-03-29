@@ -313,9 +313,19 @@
                                             <li>
                                                 Top 5 usuarios críticos
                                                 <ol>
-                                                    {% for usuario in practica2ej2 %}
+                                                    {% for usuario in practica2ej2.usuarios %}
                                                     <li>
                                                         {{usuario}}
+                                                    </li>
+                                                    {% endfor %}
+                                                </ol>
+                                            </li>
+                                            <li>
+                                                Top 5 páginas vulnerables
+                                                <ol>
+                                                    {% for pagina in practica2ej2.paginas %}
+                                                    <li>
+                                                        {{pagina}}
                                                     </li>
                                                     {% endfor %}
                                                 </ol>
