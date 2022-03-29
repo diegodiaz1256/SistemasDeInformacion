@@ -312,9 +312,21 @@ def dataframe():
     fig = px.pie(comp_y_nocomp, values='numero', names='segura',
                  title='Número de contraseñas comprometidas vs no comprometidas')
     fig.show()
+    #### --------- PRÁCTICA 2 EJERCICIO 2 -------- ####
+    print(criticos)
+    top5criticos = criticos.head(5)
+    print(top5criticos)
 
+    listaTop5Criticos = list(top5criticos.index)
+    print(listaTop5Criticos)
+
+
+    # top5pagcriticas
     con.close()
-    return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
+    return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos)
+
+    # con.close()
+    # return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
 
 
 app.run(debug=True)
