@@ -234,22 +234,23 @@
                                         <li class="breadcrumb-item active">Ataques Inc</li>
                                     </ol>
                                 </div>
-                                <h1 class="mb-2">Ejercicio 2</h1>
+                                <h1>1. Ánalisis de los datos</h1><hr>
+                                <h3>Ejercicio 2</h3>
                                 <ul>
-                                    <li>Numero de usuarios = {{ejer2.usuarios}}</li></br>
-                                    <li>Fecha:<ul>
+                                    <li><b>Numero de usuarios</b> = {{ejer2.usuarios}}</li></br>
+                                    <li><b>Fecha:</b><ul>
                                             <li>Media = {{ejer2.mediafecha}}</li>
                                             <li>Desviacion = {{ejer2.desviacionfecha}}</li>
                                             <li>Maximo = {{ejer2.maxfecha}}</li>
                                             <li>Minimo = {{ejer2.minfecha}}</li>
                                         </ul>
                                     </li></br>
-                                    <li>IPs:<ul>
+                                    <li><b>IPs:</b><ul>
                                             <li>Media = {{ejer2.mediaips}}</li>
                                             <li>Desviacion = {{ejer2.desviacionips}}</li>
                                         </ul>
                                     </li></br>
-                                    <li>Emails:<ul>
+                                    <li><b>Emails:</b><ul>
                                             <li>Media = {{ejer2.mediaemails}}</li>
                                             <li>Desviacion = {{ejer2.desviacionemails}}</li>
                                             <li>Maximo = {{ejer2.maxemails}}</li>
@@ -257,9 +258,9 @@
                                         </ul>
                                     </li></br>
                                 </ul>
-                                <h1 class="mb-2">Ejercicio 3</h1>
+                                <h3>Ejercicio 3</h3>
                                 <ul>
-                                    <li>Permisos de usuario:<ul>
+                                    <li><b>Permisos de usuario:</b><ul>
                                             <li>Numero de observaciones = {{ejer3.usuario_observaciones}}</li>
                                             <li>Numero de valores ausentes = {{ejer3.usuario_ausentes}}</li>
                                             <li>Mediana = {{ejer3.usuario_mediana}}</li>
@@ -269,7 +270,7 @@
                                             <li>Minimo = {{ejer3.usuario_min}}</li>
                                         </ul>
                                     </li></br>
-                                    <li>Permisos de administrador:<ul>
+                                    <li><b>Permisos de administrador:</b><ul>
                                             <li>Numero de observaciones = {{ejer3.admin_observaciones}}</li>
                                             <li>Numero de valores ausentes = {{ejer3.admin_ausentes}}</li>
                                             <li>Mediana = {{ejer3.admin_mediana}}</li>
@@ -279,7 +280,7 @@
                                             <li>Minimo = {{ejer3.admin_min}}</li>
                                         </ul>
                                     </li></br>
-                                    <li>Más de 200 emails:<ul>
+                                    <li><b>Más de 200 emails:</b><ul>
                                             <li>Numero de observaciones = {{ejer3.mayor200_observaciones}}</li>
                                             <li>Numero de valores ausentes = {{ejer3.mayor200_ausentes}}</li>
                                             <li>Mediana = {{ejer3.mayor200_mediana}}</li>
@@ -289,7 +290,7 @@
                                             <li>Minimo = {{ejer3.mayor200_min}}</li>
                                         </ul>
                                     </li></br>
-                                    <li>Menos de 200 emails:<ul>
+                                    <li><b>Menos de 200 emails:</b><ul>
                                             <li>Numero de observaciones = {{ejer3.menor200_observaciones}}</li>
                                             <li>Numero de valores ausentes = {{ejer3.menor200_ausentes}}</li>
                                             <li>Mediana = {{ejer3.menor200_mediana}}</li>
@@ -301,17 +302,16 @@
                                     </li>
 
                                 </ul>
+                                </br></br>
                                 <h1>
-                                    Práctica 2
-                                </h1>
-                                <ul>
-                                    <li>
-                                        <h4>
+                                    2. Representación de los datos
+                                </h1><hr>
+                                        <h3>
                                             Ejercicio 2
-                                        </h4>
+                                        </h3>
                                         <ul>
                                             <li>
-                                                Top 5 usuarios críticos
+                                                <b>Top 5 usuarios críticos</b>
                                                 <ol>
                                                     {% for usuario in practica2ej2.usuarios %}
                                                     <li>
@@ -319,9 +319,9 @@
                                                     </li>
                                                     {% endfor %}
                                                 </ol>
-                                            </li>
+                                            </li></br>
                                             <li>
-                                                Top 5 páginas vulnerables
+                                                <b>Top 5 páginas vulnerables</b>
                                                 <ol>
                                                     {% for pagina in practica2ej2.paginas %}
                                                     <li>
@@ -331,8 +331,6 @@
                                                 </ol>
                                             </li>
                                         </ul>
-                                    </li>
-                                </ul>
                             </div>
 
                         </div>
