@@ -5,6 +5,7 @@ import sqlite3
 import json
 import pandas as pd
 import plotly.express as px
+import plotly
 
 app = Flask(__name__)
 
@@ -248,7 +249,9 @@ def dataframe():
     # print(paginas_inseguras)
     grafico_paginas = px.bar(paginas_inseguras, x="url", y=["cookies", "aviso", "proteccion_de_datos"],
                              title="Páginas con políticas desactualizadas")
-    grafico_paginas.show()
+    #grafico_paginas.show()
+    auxGrafico2 = plotly.utils.PlotlyJSONEncoder
+    grafico4_2 = json.dumps(grafico_paginas, cls=auxGrafico2)
 
     # ----- 4.4 MOSTRAR SEGÚN AÑO LAS WEBS QUE CUMPLEN POLITICA PRIVACIDAD VS LAS QUE NO LA CUMPLEN -------
     politicas = datafreim_legal
@@ -261,10 +264,16 @@ def dataframe():
         {"inseguro": "sum", "seguro": "sum", "url": "first", "creacion": "first"})
     # print(politicas)
 
-    fig = px.line(politicas, x="creacion", y="inseguro", title="Nº de webs inseguras")
-    fig.show()
-    fig = px.line(politicas, x="creacion", y="seguro", title="Nº de webs seguras")
-    fig.show()
+    fig41 = px.line(politicas, x="creacion", y="inseguro", title="Nº de webs inseguras")
+    #fig1.show()
+    auxGrafico4_41 = plotly.utils.PlotlyJSONEncoder
+    grafico4_41 = json.dumps(fig41, cls=auxGrafico4_41)
+
+    fig42 = px.line(politicas, x="creacion", y="seguro", title="Nº de webs seguras")
+    #fig2.show()
+    auxGrafico4_42 = plotly.utils.PlotlyJSONEncoder
+    grafico4_42 = json.dumps(fig42, cls=auxGrafico4_42)
+
 
     # SEPARAMOS POR CONTRASEÑAS VULNERADAS
     # Diccionario con los hashes comprometidos de los usuarios
@@ -287,8 +296,10 @@ def dataframe():
     criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
     criticos = criticos.head(10)
     # print(criticos)
-    fig = px.bar(criticos, x=criticos.index, y='prob-clic', title="Top 10 usuarios más críticos")
-    fig.show()
+    fig1 = px.bar(criticos, x=criticos.index, y='prob-clic', title="Top 10 usuarios más críticos")
+    #fig.show()
+    auxGrafico1 = plotly.utils.PlotlyJSONEncoder
+    grafico4_1 = json.dumps(fig1, cls=auxGrafico1)
 
     # ----- 4.3 MEDIA DE CONEXIONES CON CONTRASEÑA VULNERABLE VS NO VULNERABLE -----
     conexionesvuln = datafreim_userpass
@@ -296,8 +307,10 @@ def dataframe():
     conexionesvuln["num_conexiones"] = conexionesvuln["ip"].size
     conexionesvuln = conexionesvuln.groupby(["segura"]).agg({"segura": "first", "num_conexiones": "sum"})
     # print(conexionesvuln)
-    fig = px.bar(conexionesvuln, x='segura', y='num_conexiones', title='Media de conexiones')
-    fig.show()
+    fig3 = px.bar(conexionesvuln, x='segura', y='num_conexiones', title='Media de conexiones')
+    # fig.show()
+    auxGrafico3 = plotly.utils.PlotlyJSONEncoder
+    grafico4_3 = json.dumps(fig3, cls=auxGrafico3)
 
     # ----- 4.5 NUMERO DE CONTRASEÑAS COMPROMETIDAS / NO COMPROMETIDAS -----
     datafreim_contrasenas = datafreim_userpass.drop(
@@ -309,9 +322,11 @@ def dataframe():
     comp_y_nocomp = datafreim_contrasenas.groupby(["segura"]).agg({"segura": "first", "numero": "size"})
     # print(comp_y_nocomp)
 
-    fig = px.pie(comp_y_nocomp, values='numero', names='segura',
+    fig5 = px.pie(comp_y_nocomp, values='numero', names='segura',
                  title='Número de contraseñas comprometidas vs no comprometidas')
-    fig.show()
+    #fig.show()
+    auxGrafico5 = plotly.utils.PlotlyJSONEncoder
+    grafico4_5 = json.dumps(fig5, cls=auxGrafico5)
 
 
     #### --------- PRÁCTICA 2 EJERCICIO 2 -------- ####
@@ -337,8 +352,7 @@ def dataframe():
     listaTop5Criticos = DotMap(listaTop5Criticos)
 
     con.close()
-    return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos)
-
+    return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos, grafico4_1=grafico4_1, grafico4_2=grafico4_2, grafico4_3=grafico4_3, grafico4_41=grafico4_41, grafico4_42=grafico4_42, grafico4_5=grafico4_5)
     # con.close()
     # return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
 

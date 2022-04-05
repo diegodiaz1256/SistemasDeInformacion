@@ -235,102 +235,255 @@
                                     </ol>
                                 </div>
                                 <h1>1. Ánalisis de los datos</h1><hr>
-                                <h3>Ejercicio 2</h3>
-                                <ul>
-                                    <li><b>Numero de usuarios</b> = {{ejer2.usuarios}}</li></br>
-                                    <li><b>Fecha:</b><ul>
-                                            <li>Media = {{ejer2.mediafecha}}</li>
-                                            <li>Desviacion = {{ejer2.desviacionfecha}}</li>
-                                            <li>Maximo = {{ejer2.maxfecha}}</li>
-                                            <li>Minimo = {{ejer2.minfecha}}</li>
+                                <div class="card card-primary">
+                                      <div class="card-header">
+                                        <h3 class="card-title">Ejercicio 2</h3>
+                                          <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                          </div>
+                                      </div>
+                                      <div class="card-body">
+                                          <ul>
+                                            <li><b>Numero de usuarios</b> = {{ejer2.usuarios}}</li></br>
+                                            <li><b>Fecha:</b><ul>
+                                                    <li>Media = {{ejer2.mediafecha}}</li>
+                                                    <li>Desviacion = {{ejer2.desviacionfecha}}</li>
+                                                    <li>Maximo = {{ejer2.maxfecha}}</li>
+                                                    <li>Minimo = {{ejer2.minfecha}}</li>
+                                                </ul>
+                                            </li></br>
+                                            <li><b>IPs:</b><ul>
+                                                    <li>Media = {{ejer2.mediaips}}</li>
+                                                    <li>Desviacion = {{ejer2.desviacionips}}</li>
+                                                </ul>
+                                            </li></br>
+                                            <li><b>Emails:</b><ul>
+                                                    <li>Media = {{ejer2.mediaemails}}</li>
+                                                    <li>Desviacion = {{ejer2.desviacionemails}}</li>
+                                                    <li>Maximo = {{ejer2.maxemails}}</li>
+                                                    <li>Minimo = {{ejer2.minemails}}</li>
+                                                </ul>
+                                            </li></br>
                                         </ul>
-                                    </li></br>
-                                    <li><b>IPs:</b><ul>
-                                            <li>Media = {{ejer2.mediaips}}</li>
-                                            <li>Desviacion = {{ejer2.desviacionips}}</li>
-                                        </ul>
-                                    </li></br>
-                                    <li><b>Emails:</b><ul>
-                                            <li>Media = {{ejer2.mediaemails}}</li>
-                                            <li>Desviacion = {{ejer2.desviacionemails}}</li>
-                                            <li>Maximo = {{ejer2.maxemails}}</li>
-                                            <li>Minimo = {{ejer2.minemails}}</li>
-                                        </ul>
-                                    </li></br>
-                                </ul>
-                                <h3>Ejercicio 3</h3>
-                                <ul>
-                                    <li><b>Permisos de usuario:</b><ul>
-                                            <li>Numero de observaciones = {{ejer3.usuario_observaciones}}</li>
-                                            <li>Numero de valores ausentes = {{ejer3.usuario_ausentes}}</li>
-                                            <li>Mediana = {{ejer3.usuario_mediana}}</li>
-                                            <li>Media = {{ejer3.usuario_media}}</li>
-                                            <li>Varianza = {{ejer3.usuario_varianza}}</li>
-                                            <li>Maximo = {{ejer3.usuario_max}}</li>
-                                            <li>Minimo = {{ejer3.usuario_min}}</li>
-                                        </ul>
-                                    </li></br>
-                                    <li><b>Permisos de administrador:</b><ul>
-                                            <li>Numero de observaciones = {{ejer3.admin_observaciones}}</li>
-                                            <li>Numero de valores ausentes = {{ejer3.admin_ausentes}}</li>
-                                            <li>Mediana = {{ejer3.admin_mediana}}</li>
-                                            <li>Media = {{ejer3.admin_media}}</li>
-                                            <li>Varianza = {{ejer3.admin_varianza}}</li>
-                                            <li>Maximo = {{ejer3.admin_max}}</li>
-                                            <li>Minimo = {{ejer3.admin_min}}</li>
-                                        </ul>
-                                    </li></br>
-                                    <li><b>Más de 200 emails:</b><ul>
-                                            <li>Numero de observaciones = {{ejer3.mayor200_observaciones}}</li>
-                                            <li>Numero de valores ausentes = {{ejer3.mayor200_ausentes}}</li>
-                                            <li>Mediana = {{ejer3.mayor200_mediana}}</li>
-                                            <li>Media = {{ejer3.mayor200_media}}</li>
-                                            <li>Varianza = {{ejer3.mayor200_varianza}}</li>
-                                            <li>Maximo = {{ejer3.mayor200_max}}</li>
-                                            <li>Minimo = {{ejer3.mayor200_min}}</li>
-                                        </ul>
-                                    </li></br>
-                                    <li><b>Menos de 200 emails:</b><ul>
-                                            <li>Numero de observaciones = {{ejer3.menor200_observaciones}}</li>
-                                            <li>Numero de valores ausentes = {{ejer3.menor200_ausentes}}</li>
-                                            <li>Mediana = {{ejer3.menor200_mediana}}</li>
-                                            <li>Media = {{ejer3.menor200_media}}</li>
-                                            <li>Varianza = {{ejer3.menor200_varianza}}</li>
-                                            <li>Maximo = {{ejer3.menor200_max}}</li>
-                                            <li>Minimo = {{ejer3.menor200_min}}</li>
-                                        </ul>
-                                    </li>
+                                      </div>
+                                </div>
+                                <div class="card card-primary">
+                                      <div class="card-header">
+                                        <h3 class="card-title">Ejercicio 3</h3>
+                                          <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                          </div>
+                                      </div>
+                                      <div class="card-body">
+                                          <ul>
+                                            <li><b>Permisos de usuario:</b><ul>
+                                                    <li>Numero de observaciones = {{ejer3.usuario_observaciones}}</li>
+                                                    <li>Numero de valores ausentes = {{ejer3.usuario_ausentes}}</li>
+                                                    <li>Mediana = {{ejer3.usuario_mediana}}</li>
+                                                    <li>Media = {{ejer3.usuario_media}}</li>
+                                                    <li>Varianza = {{ejer3.usuario_varianza}}</li>
+                                                    <li>Maximo = {{ejer3.usuario_max}}</li>
+                                                    <li>Minimo = {{ejer3.usuario_min}}</li>
+                                                </ul>
+                                            </li></br>
+                                            <li><b>Permisos de administrador:</b><ul>
+                                                    <li>Numero de observaciones = {{ejer3.admin_observaciones}}</li>
+                                                    <li>Numero de valores ausentes = {{ejer3.admin_ausentes}}</li>
+                                                    <li>Mediana = {{ejer3.admin_mediana}}</li>
+                                                    <li>Media = {{ejer3.admin_media}}</li>
+                                                    <li>Varianza = {{ejer3.admin_varianza}}</li>
+                                                    <li>Maximo = {{ejer3.admin_max}}</li>
+                                                    <li>Minimo = {{ejer3.admin_min}}</li>
+                                                </ul>
+                                            </li></br>
+                                            <li><b>Más de 200 emails:</b><ul>
+                                                    <li>Numero de observaciones = {{ejer3.mayor200_observaciones}}</li>
+                                                    <li>Numero de valores ausentes = {{ejer3.mayor200_ausentes}}</li>
+                                                    <li>Mediana = {{ejer3.mayor200_mediana}}</li>
+                                                    <li>Media = {{ejer3.mayor200_media}}</li>
+                                                    <li>Varianza = {{ejer3.mayor200_varianza}}</li>
+                                                    <li>Maximo = {{ejer3.mayor200_max}}</li>
+                                                    <li>Minimo = {{ejer3.mayor200_min}}</li>
+                                                </ul>
+                                            </li></br>
+                                            <li><b>Menos de 200 emails:</b><ul>
+                                                    <li>Numero de observaciones = {{ejer3.menor200_observaciones}}</li>
+                                                    <li>Numero de valores ausentes = {{ejer3.menor200_ausentes}}</li>
+                                                    <li>Mediana = {{ejer3.menor200_mediana}}</li>
+                                                    <li>Media = {{ejer3.menor200_media}}</li>
+                                                    <li>Varianza = {{ejer3.menor200_varianza}}</li>
+                                                    <li>Maximo = {{ejer3.menor200_max}}</li>
+                                                    <li>Minimo = {{ejer3.menor200_min}}</li>
+                                                </ul>
+                                            </li>
 
-                                </ul>
+                                        </ul>
+                                      </div>
+                                </div>
+
+                                  <div class="card card-primary">
+                                      <div class="card-header">
+                                        <h3 class="card-title">Ejercicio 4</h3>
+                                          <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                          </div>
+                                      </div>
+                                      <div class="card-body">
+                                            <div class="card card-dark">
+                                                  <div class="card-header">
+                                                    <h3 class="card-title">Top usuarios críticos</h3>
+                                                      <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                      </div>
+                                                  </div>
+                                                  <div class="card-body">
+                                                    {% if grafico4_1 %}
+                                                      <div id='chart1' class='chart'”></div>
+                                                         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                                                         <script type='text/javascript'>
+                                                          var graphs = {{grafico4_1 | safe}};
+                                                          Plotly.plot('chart1',graphs,{});
+                                                        </script>
+                                                    {% endif %}
+                                                  </div>
+                                                </div>
+                                                <div class="card card-dark">
+                                                  <div class="card-header">
+                                                    <h3 class="card-title">Páginas web con las políticas más desactualizadas</h3>
+                                                      <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                      </div>
+                                                  </div>
+                                                  <div class="card-body">
+                                                    {% if grafico4_2 %}
+                                                      <div id='chart2' class='chart'”></div>
+                                                         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                                                         <script type='text/javascript'>
+                                                          var graphs = {{grafico4_2 | safe}};
+                                                          Plotly.plot('chart2',graphs,{});
+                                                        </script>
+                                                    {% endif %}
+                                                  </div>
+                                                </div>
+                                                <div class="card card-dark">
+                                                  <div class="card-header">
+                                                    <h3 class="card-title">Conexiones de usuarios con contraseña vulnerable vs no vulnerables</h3>
+                                                      <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                      </div>
+                                                  </div>
+                                                  <div class="card-body">
+                                                    {% if grafico4_3 %}
+                                                      <div id='chart3' class='chart'”></div>
+                                                         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                                                         <script type='text/javascript'>
+                                                          var graphs = {{grafico4_3 | safe}};
+                                                          Plotly.plot('chart3',graphs,{});
+                                                        </script>
+                                                    {% endif %}
+                                                  </div>
+                                                </div>
+                                                <div class="card card-dark">
+                                                  <div class="card-header">
+                                                    <h3 class="card-title">Evolución de la creación de páginas web</h3>
+                                                      <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                      </div>
+                                                  </div>
+                                                  <div class="card-body">
+                                                    {% if grafico4_41 %}
+                                                      <div id='chart41' class='chart'”></div>
+                                                         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                                                         <script type='text/javascript'>
+                                                          var graphs = {{grafico4_41 | safe}};
+                                                          Plotly.plot('chart41',graphs,{});
+                                                          var graphs = {{grafico4_42 | safe}};
+                                                          Plotly.plot('chart42',graphs,{});
+                                                        </script>
+                                                    {% endif %}
+                                                      {% if grafico4_42 %}
+                                                      <div id='chart42' class='chart'”></div>
+                                                         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                                                         <script type='text/javascript'>
+                                                          var graphs = {{grafico4_42 | safe}};
+                                                          Plotly.plot('chart42',graphs,{});
+                                                        </script>
+                                                    {% endif %}
+                                                  </div>
+                                                </div>
+                                                <div class="card card-dark">
+                                                  <div class="card-header">
+                                                    <h3 class="card-title">Contraseñas comprometidas vs No comprometidas</h3>
+                                                      <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                      </div>
+                                                  </div>
+                                                  <div class="card-body">
+                                                    {% if grafico4_5 %}
+                                                      <div id='chart5' class='chart'”></div>
+                                                         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                                                         <script type='text/javascript'>
+                                                          var graphs = {{grafico4_5 | safe}};
+                                                          Plotly.plot('chart5',graphs,{});
+                                                        </script>
+                                                    {% endif %}
+                                                  </div>
+                                                </div>
+                                      </div>
+                                </div>
+
+
+
+
                                 </br></br>
                                 <h1>
                                     2. Representación de los datos
                                 </h1><hr>
-                                        <h3>
-                                            Ejercicio 2
-                                        </h3>
-                                        <ul>
-                                            <li>
-                                                <b>Top 5 usuarios críticos</b>
-                                                <ol>
-                                                    {% for usuario in practica2ej2.usuarios %}
-                                                    <li>
-                                                        {{usuario}}
-                                                    </li>
-                                                    {% endfor %}
-                                                </ol>
-                                            </li></br>
-                                            <li>
-                                                <b>Top 5 páginas vulnerables</b>
-                                                <ol>
-                                                    {% for pagina in practica2ej2.paginas %}
-                                                    <li>
-                                                        {{pagina}}
-                                                    </li>
-                                                    {% endfor %}
-                                                </ol>
-                                            </li>
-                                        </ul>
+                                          <div class="card card-primary">
+                                              <div class="card-header">
+                                                <h3 class="card-title">Ejercicio 2</h3>
+                                                  <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                                                  </div>
+                                              </div>
+                                              <div class="card-body">
+                                                 <div class="form-group">
+                                                         <label>¿Cuántos usuarios críticos quieres ver?</label></br>
+                                                        <input type="number" class="form-control .input-group.input-group-sm" id="input_numUsersCriticos">
+                                                     </div>
+                                                    <button type="submit" class="btn btn-primary" onclick="load_usersCriticos">Ver</button>
+                                                    <script>
+                                                        function load_usersCriticos(){
+                                                            alert('Button Clcked');
+                                                        }
+                                                    </script>
+
+                                                    </br></br></br></br>
+                                                    <ul>
+                                                        <li>
+                                                            <b>Top 5 usuarios críticos</b>
+                                                            <ol>
+                                                                {% for usuario in practica2ej2.usuarios %}
+                                                                <li>
+                                                                    {{usuario}}
+                                                                </li>
+                                                                {% endfor %}
+                                                            </ol>
+                                                        </li></br>
+                                                        <li>
+                                                            <b>Top 5 páginas vulnerables</b>
+                                                            <ol>
+                                                                {% for pagina in practica2ej2.paginas %}
+                                                                <li>
+                                                                    {{pagina}}
+                                                                </li>
+                                                                {% endfor %}
+                                                            </ol>
+                                                        </li>
+                                                    </ul>
+                                          </div>
+                                      </div>
+
                             </div>
 
                         </div>
@@ -354,6 +507,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
 </body>
 
 </html>
