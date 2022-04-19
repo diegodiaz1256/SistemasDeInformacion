@@ -447,14 +447,22 @@
                                                   </div>
                                               </div>
                                               <div class="card-body">
-                                                 <div class="form-group">
-                                                         <label>¿Cuántos usuarios críticos quieres ver?</label></br>
-                                                        <input type="number" class="form-control .input-group.input-group-sm" id="input_numUsersCriticos">
+                                                  <form id="top_x_usersCriticos">
+                                                    <div class="form-group">
+                                                     <label>¿Cuántos usuarios críticos quieres ver?</label></br>
+                                                        <input type="number" name="num" class="form-control .input-group.input-group-sm" id="input_numUsersCriticos">
                                                      </div>
-                                                    <button type="submit" class="btn btn-primary" onclick="load_usersCriticos">Ver</button>
+                                                    <button type="submit" class="btn btn-primary" onclick="load_usersCriticos()">Ver</button>
+                                                  </form>
                                                     <script>
                                                         function load_usersCriticos(){
-                                                            alert('Button Clcked');
+                                                            document.getElementById("top_x_usersCriticos").addEventListener("submit", (e)=>{
+                                                                e.preventDefault()
+                                                                let data = Object.fromEntries(
+                                                                    new FormData(e.target)
+                                                                )
+                                                                alert(JSON.stringify(data))
+                                                            })
                                                         }
                                                     </script>
 
