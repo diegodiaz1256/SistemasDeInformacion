@@ -125,12 +125,40 @@ def diccionarioHashes():
     return dict_hashes
 
 
+def df_legal():
+    con = sqlite3.connect("example2.db", timeout=10)
+    query_legal = pd.read_sql_query('SELECT url, cookies, aviso, proteccion_de_datos, creacion FROM legal', con)
+    datafreim_legal = pd.DataFrame(query_legal, columns=["url", "cookies", "aviso", "proteccion_de_datos", "creacion"])
+    # print(datafreim_legal)
+
+    # ----- 4.2 PAGINAS WEB CON POLITICAS DESACTUALIZADAS -------
+    datafreim_legal["inseguro"] = datafreim_legal["cookies"] + datafreim_legal["aviso"] + datafreim_legal[
+        "proteccion_de_datos"]
+    datafreim_legal = datafreim_legal.dropna(axis=1)
+    datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
+    con.close()
+    return datafreim_legal
+
+
+@app.route('/topPages', methods=['GET'])
+def topXpaginasOriginal():
+    n = int(request.args.get("n"))
+    pages = topXpaginasVuln(n)
+    urls = list(pages["url"])
+    jsontext = json.dumps({"urls": urls, "num": n})
+    return jsontext
+
+
+def topXpaginasVuln(n):
+    return df_legal().head(n)
+
+
 @app.route('/topUsers', methods=['GET'])
-def topXusuariosOriginal(n=0):
+def topXusuariosOriginal():
     n = int(request.args.get("n"))
     users = topXusuarios(n)
-    names = list(users["nombre"])
-    jsontext = json.dumps(names)
+    names = list(users.index)
+    jsontext = json.dumps({"names": names, "num": n})
     return jsontext
 
 
@@ -304,15 +332,16 @@ def dataframe():
     # ------------- EJERCICIO 4 -------------
 
     # Dataframe datos de legal
-    query_legal = pd.read_sql_query('SELECT url, cookies, aviso, proteccion_de_datos, creacion FROM legal', con)
-    datafreim_legal = pd.DataFrame(query_legal, columns=["url", "cookies", "aviso", "proteccion_de_datos", "creacion"])
-    # print(datafreim_legal)
-
-    # ----- 4.2 PAGINAS WEB CON POLITICAS DESACTUALIZADAS -------
-    datafreim_legal["inseguro"] = datafreim_legal["cookies"] + datafreim_legal["aviso"] + datafreim_legal[
-        "proteccion_de_datos"]
-    datafreim_legal = datafreim_legal.dropna(axis=1)
-    datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
+    # query_legal = pd.read_sql_query('SELECT url, cookies, aviso, proteccion_de_datos, creacion FROM legal', con)
+    # datafreim_legal = pd.DataFrame(query_legal, columns=["url", "cookies", "aviso", "proteccion_de_datos", "creacion"])
+    # # print(datafreim_legal)
+    #
+    # # ----- 4.2 PAGINAS WEB CON POLITICAS DESACTUALIZADAS -------
+    # datafreim_legal["inseguro"] = datafreim_legal["cookies"] + datafreim_legal["aviso"] + datafreim_legal[
+    #     "proteccion_de_datos"]
+    # datafreim_legal = datafreim_legal.dropna(axis=1)
+    # datafreim_legal.sort_values(by=["inseguro"], ascending=True, inplace=True)
+    datafreim_legal = df_legal()
     paginas_inseguras = datafreim_legal.head(5)
     # print(paginas_inseguras)
     grafico_paginas = px.bar(paginas_inseguras, x="url", y=["cookies", "aviso", "proteccion_de_datos"],
@@ -400,19 +429,19 @@ def dataframe():
     grafico4_5 = json.dumps(fig5, cls=auxGrafico5)
 
     #### --------- PRÁCTICA 2 EJERCICIO 2 -------- ####
-    print(criticos)
+    # print(criticos)
     top5criticos = criticos.head(5)
-    print(top5criticos)
+    # print(top5criticos)
 
     listaTop5Criticos = list(top5criticos.index)
-    print(listaTop5Criticos)
+    # print(listaTop5Criticos)
 
-    print(datafreim_legal)
+    # print(datafreim_legal)
     top5pagcriticas = datafreim_legal.head(5)
-    print(top5pagcriticas)
+    # print(top5pagcriticas)
 
     listaTop5PagCriticas = list(top5pagcriticas["url"])
-    print(listaTop5PagCriticas)
+    # print(listaTop5PagCriticas)
 
     listaTop5Criticos = {
         "usuarios": listaTop5Criticos,
