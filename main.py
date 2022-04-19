@@ -1,6 +1,6 @@
 import numpy as np
 from dotmap import DotMap
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sqlite3
 import json
 import pandas as pd
@@ -95,12 +95,8 @@ def func():
     return "<h1>Base de datos inicializada correctamente</h1>"
 
 
-# ------------- EJERCICIOS 2, 3 Y 4 -------------
-@app.route('/dataframe')
-def dataframe():
+def df_datafreim():
     con = sqlite3.connect("example2.db", timeout=10)
-    # ------------- EJERCICIO 2 -------------
-    # Inicializamos Dataframe "datafreim" con los datos no nulos y coherentes
     query = pd.read_sql_query(
         'SELECT u.*, i.ip, i.fecha, e.total, e.phising, e.clicados FROM users u JOIN ips i ON u.name=i.name '
         'JOIN emails e ON u.name=e.name WHERE u.provincia != "None" AND '
@@ -110,12 +106,84 @@ def dataframe():
                                       "phising", "clicados"])
 
     datafreim = datafreim.drop("name", axis=1)
-    # print(datafreim)
+    con.close()
+    return datafreim
 
-    # Dataframe "original" con una fila por usuario, con los datos bidimensionales (IPs, Fechas) cargados como arrays
+
+def df_original():
+    datafreim = df_datafreim()
     original = datafreim.groupby(["name"], dropna=False).agg(
         {"fecha": np.array, "ip": np.array, "telefono": "first", "contrasena": "first", "provincia": "first",
          "permisos": "first", "total": "first", "phising": "first", "clicados": "first"})
+    return original
+
+
+def diccionarioHashes():
+    diccionario = open("data/diccionario.txt", "r")
+    dict_hashes = diccionario.read().split("\n")
+    diccionario.close()
+    return dict_hashes
+
+
+@app.route('/topUsers', methods=['GET'])
+def topXusuariosOriginal(n=0):
+    n = int(request.args.get("n"))
+    users = topXusuarios(n)
+    names = list(users["nombre"])
+    jsontext = json.dumps(names)
+    return jsontext
+
+
+def topXusuarios(n):
+    # SEPARAMOS POR CONTRASEÑAS VULNERADAS
+    # Diccionario con los hashes comprometidos de los usuarios
+    # diccionario = open("data/diccionario.txt", "r")
+    # dict_hashes = diccionario.read().split("\n")
+    # diccionario.close()
+    dict_hashes = diccionarioHashes()
+
+    datafreim_userpass = df_original()
+    # print(datafreim_userpass)
+    datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(dict_hashes)) * 1
+    # print(datafreim_userpass)
+
+    # Dataframes de usuarios comprometidos  / no comprometidos
+    comprometidos = datafreim_userpass[datafreim_userpass.segura == 1]
+    nocomprometidos = datafreim_userpass[datafreim_userpass.segura == 0]
+
+    # -----  X USUARIOS MÁS CRÍTICOS -----
+    comprometidos["prob-clic"] = comprometidos["clicados"] / comprometidos["phising"]
+    criticos = comprometidos
+    criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
+    criticos = criticos.head(n)
+
+    return criticos
+
+
+# ------------- EJERCICIOS 2, 3 Y 4 -------------
+@app.route('/dataframe')
+def dataframe():
+    con = sqlite3.connect("example2.db", timeout=10)
+    # ------------- EJERCICIO 2 -------------
+    # # Inicializamos Dataframe "datafreim" con los datos no nulos y coherentes
+    # query = pd.read_sql_query(
+    #     'SELECT u.*, i.ip, i.fecha, e.total, e.phising, e.clicados FROM users u JOIN ips i ON u.name=i.name '
+    #     'JOIN emails e ON u.name=e.name WHERE u.provincia != "None" AND '
+    #     'u.telefono != "None" AND i.ip LIKE "%.%.%.%"', con, "name")
+    # datafreim = pd.DataFrame(query,
+    #                          columns=["name", "telefono", "contrasena", "provincia", "permisos", "ip", "fecha", "total",
+    #                                   "phising", "clicados"])
+    #
+    # datafreim = datafreim.drop("name", axis=1)
+    # print(datafreim)
+
+    datafreim = df_datafreim()
+    original = df_original()
+
+    # Dataframe "original" con una fila por usuario, con los datos bidimensionales (IPs, Fechas) cargados como arrays
+    # original = datafreim.groupby(["name"], dropna=False).agg(
+    #     {"fecha": np.array, "ip": np.array, "telefono": "first", "contrasena": "first", "provincia": "first",
+    #      "permisos": "first", "total": "first", "phising": "first", "clicados": "first"})
 
     # Agrupaciones
     fecha = datafreim.groupby(["name"], dropna=True).agg({"fecha": "count"})
@@ -249,7 +317,7 @@ def dataframe():
     # print(paginas_inseguras)
     grafico_paginas = px.bar(paginas_inseguras, x="url", y=["cookies", "aviso", "proteccion_de_datos"],
                              title="Páginas con políticas desactualizadas")
-    #grafico_paginas.show()
+    # grafico_paginas.show()
     auxGrafico2 = plotly.utils.PlotlyJSONEncoder
     grafico4_2 = json.dumps(grafico_paginas, cls=auxGrafico2)
 
@@ -265,43 +333,46 @@ def dataframe():
     # print(politicas)
 
     fig41 = px.line(politicas, x="creacion", y="inseguro", title="Nº de webs inseguras")
-    #fig1.show()
+    # fig1.show()
     auxGrafico4_41 = plotly.utils.PlotlyJSONEncoder
     grafico4_41 = json.dumps(fig41, cls=auxGrafico4_41)
 
     fig42 = px.line(politicas, x="creacion", y="seguro", title="Nº de webs seguras")
-    #fig2.show()
+    # fig2.show()
     auxGrafico4_42 = plotly.utils.PlotlyJSONEncoder
     grafico4_42 = json.dumps(fig42, cls=auxGrafico4_42)
 
-
     # SEPARAMOS POR CONTRASEÑAS VULNERADAS
     # Diccionario con los hashes comprometidos de los usuarios
-    diccionario = open("data/diccionario.txt", "r")
-    dict_hashes = diccionario.read().split("\n")
-    diccionario.close()
+    # diccionario = open("data/diccionario.txt", "r")
+    # dict_hashes = diccionario.read().split("\n")
+    # diccionario.close()
 
-    datafreim_userpass = original
-    # print(datafreim_userpass)
-    datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(dict_hashes)) * 1
-    # print(datafreim_userpass)
-
-    # Dataframes de usuarios comprometidos  / no comprometidos
-    comprometidos = datafreim_userpass[datafreim_userpass.segura == 1]
-    nocomprometidos = datafreim_userpass[datafreim_userpass.segura == 0]
-
-    # ----- 4.1 10 USUARIOS MÁS CRÍTICOS -----
-    comprometidos["prob-clic"] = comprometidos["clicados"] / comprometidos["phising"]
-    criticos = comprometidos
-    criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
-    criticos = criticos.head(10)
+    # datafreim_userpass = original
+    # # print(datafreim_userpass)
+    # datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(dict_hashes)) * 1
+    # # print(datafreim_userpass)
+    #
+    # # Dataframes de usuarios comprometidos  / no comprometidos
+    # comprometidos = datafreim_userpass[datafreim_userpass.segura == 1]
+    # nocomprometidos = datafreim_userpass[datafreim_userpass.segura == 0]
+    #
+    # # ----- 4.1 10 USUARIOS MÁS CRÍTICOS -----
+    # comprometidos["prob-clic"] = comprometidos["clicados"] / comprometidos["phising"]
+    # criticos = comprometidos
+    # criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
+    # criticos = criticos.head(10)
     # print(criticos)
+
+    criticos = topXusuarios(10)
     fig1 = px.bar(criticos, x=criticos.index, y='prob-clic', title="Top 10 usuarios más críticos")
-    #fig.show()
+    # fig.show()
     auxGrafico1 = plotly.utils.PlotlyJSONEncoder
     grafico4_1 = json.dumps(fig1, cls=auxGrafico1)
 
     # ----- 4.3 MEDIA DE CONEXIONES CON CONTRASEÑA VULNERABLE VS NO VULNERABLE -----
+    datafreim_userpass = df_original()
+    datafreim_userpass["segura"] = (datafreim_userpass["contrasena"].isin(diccionarioHashes())) * 1
     conexionesvuln = datafreim_userpass
     conexionesvuln["segura"] = conexionesvuln["segura"] == 1
     conexionesvuln["num_conexiones"] = conexionesvuln["ip"].size
@@ -323,11 +394,10 @@ def dataframe():
     # print(comp_y_nocomp)
 
     fig5 = px.pie(comp_y_nocomp, values='numero', names='segura',
-                 title='Número de contraseñas comprometidas vs no comprometidas')
-    #fig.show()
+                  title='Número de contraseñas comprometidas vs no comprometidas')
+    # fig.show()
     auxGrafico5 = plotly.utils.PlotlyJSONEncoder
     grafico4_5 = json.dumps(fig5, cls=auxGrafico5)
-
 
     #### --------- PRÁCTICA 2 EJERCICIO 2 -------- ####
     print(criticos)
@@ -352,7 +422,9 @@ def dataframe():
     listaTop5Criticos = DotMap(listaTop5Criticos)
 
     con.close()
-    return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos, grafico4_1=grafico4_1, grafico4_2=grafico4_2, grafico4_3=grafico4_3, grafico4_41=grafico4_41, grafico4_42=grafico4_42, grafico4_5=grafico4_5)
+    return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos,
+                           grafico4_1=grafico4_1, grafico4_2=grafico4_2, grafico4_3=grafico4_3, grafico4_41=grafico4_41,
+                           grafico4_42=grafico4_42, grafico4_5=grafico4_5)
     # con.close()
     # return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
 
