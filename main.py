@@ -1,13 +1,19 @@
 import numpy as np
 from dotmap import DotMap
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import sqlite3
 import json
 import pandas as pd
 import plotly.express as px
 import plotly
+import requests as req
 
 app = Flask(__name__)
+
+
+@app.route('/static/<path:path>')
+def send_report(path):
+    return send_from_directory('static', path)
 
 
 ###### CREACIÓN DE TABLAS PARA LA BASE DE DATOS ######
@@ -188,8 +194,14 @@ def topXusuarios(n):
     return criticos
 
 
+@app.route("/cveinfo", methods=['GET'])
+def cve_info():
+    data = req.get("https://cve.circl.lu/api/last/10")
+    return jsonify(data.json())
+
+
 # ------------- EJERCICIOS 2, 3 Y 4 -------------
-@app.route('/dataframe')
+@app.route('/dataframe', methods=['GET'])
 def dataframe():
     con = sqlite3.connect("example2.db", timeout=10)
     # ------------- EJERCICIO 2 -------------
