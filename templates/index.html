@@ -483,10 +483,14 @@
                                                    class="form-control .input-group.input-group-sm"
                                                    id="input_numUsersCriticos" min="1" max="10">
                                         </div>
-                                        <button type="submit" class="btn btn-primary" onclick="load_usersCriticos()">
+                                        <button type="submit" class="btn btn-primary d-inline">
                                             Ver
                                         </button>
                                     </form>
+                                    <button class="btn btn-primary d-none" id="buttonSpam">
+                                            Ver Spam
+                                    </button>
+
                                     <script>
                                         const shortId = (id) => {
                                             return document.getElementById(id)
@@ -500,6 +504,8 @@
                                             )
                                             fetch(`/topUsers?n=${data.num}`).then(res => res.json()).then(data => {
                                                 console.log(data)
+                                                shortId("buttonSpam").classList.toggle("d-none", false)
+                                                // shortId("buttonSpam").classList.toggle("d-inline", true)
                                                 let listausuarios = shortId("listusuarios")
                                                 listausuarios.innerHTML = ""
                                                 data.names.forEach(name => {
@@ -508,10 +514,15 @@
                                                     listausuarios.appendChild(elem)
                                                 })
                                                 shortId("titleusuarios").innerHTML = `Top ${data.num} Usuario${data.num > 1 ? "s" : ""} critico${data.num > 1 ? "s" : ""}`
+
+                                                // AQUÍ
                                             })
                                             //alert(JSON.stringify(data))
                                         })
 
+                                        shortId("buttonSpam").addEventListener("click",() => {
+
+                                        })
                                     </script>
 
                                     </br></br></br></br>
@@ -613,7 +624,7 @@
                                                 })
                                         }
                                         window.addEventListener("DOMContentLoaded", checkCVE)
-                                        setInterval(checkCVE, 5000)
+                                        setInterval(checkCVE, 20000)
 
                                         // setInterval(()=>{
                                         //     fetch("/cveinfo")

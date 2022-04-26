@@ -164,7 +164,8 @@ def topXusuariosOriginal():
     n = int(request.args.get("n"))
     users = topXusuarios(n)
     names = list(users.index)
-    jsontext = json.dumps({"names": names, "num": n})
+    probClick = list(users["prob-clic"])
+    jsontext = json.dumps({"names": names, "num": n, "probClick": probClick})
     return jsontext
 
 
@@ -190,7 +191,7 @@ def topXusuarios(n):
     criticos = comprometidos
     criticos.sort_values(by=["prob-clic"], ascending=False, inplace=True)
     criticos = criticos.head(n)
-
+    print(criticos)
     return criticos
 
 
