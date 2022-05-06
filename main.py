@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from dotmap import DotMap
 from flask import Flask, render_template, request, jsonify, send_from_directory
 import sqlite3
@@ -7,6 +8,9 @@ import pandas as pd
 import plotly.express as px
 import plotly
 import requests as req
+from sklearn import datasets, linear_model
+from sklearn.metrics import mean_squared_error, r2_score
+
 
 app = Flask(__name__)
 
@@ -201,9 +205,63 @@ def cve_info():
     return jsonify(data.json())
 
 
+def IA():
+    clases = open("data/users_IA_clases.json")
+    predecir = open("data/users_IA_predecir.json")
+    clasesData = json.load(clases)
+    predecirData = json.load(predecir)
+
+    train_x = []
+    train_y = []
+
+    for e in clasesData["usuarios"]:
+        usuario = e["usuario"]
+        phishing = e["emails_phishing_recibidos"]
+        clickado = e["emails_phishing_clicados"]
+        vulnerable = e["vulnerable"]
+        train_x.append([phishing,clickado])
+        train_y.append(vulnerable)
+
+    training_x = train_x[:-6]
+    training_y = train_y[:-6]
+    users_x = train_x[-6:]
+    users_y = train_y[-6:]
+
+    regr = linear_model.LinearRegression()
+
+    regr.fit(training_x, training_y)
+    prediccion = regr.predict(users_x)
+    # The mean squared error
+
+    for i in range(len(prediccion)):
+        if prediccion[i] >= 0.5:
+            prediccion[i] = 1
+        else:
+            prediccion[i] = 0
+
+    print(prediccion)
+    print("Mean squared error: %.2f" % mean_squared_error(users_y, prediccion))
+    print("Users x:", users_x)
+    print("Users y:", users_y)
+    print("Prediccion:", prediccion)
+    plt.scatter(users_x, users_y, color="black")
+    plt.plot(users_x, prediccion, color="blue", linewidth=3)
+    plt.xticks(())
+    plt.yticks(())
+    plt.show()
+
+    # for e in predecirData["usuarios"]:
+    #     usuario = e["usuario"]
+    #     phishing = e["emails_phishing_recibidos"]
+    #     clickado = e["emails_phishing_clicados"]
+    #     users_x.append([phishing,clickado])
+
+
+
 # ------------- EJERCICIOS 2, 3 Y 4 -------------
 @app.route('/dataframe', methods=['GET'])
 def dataframe():
+    IA()
     con = sqlite3.connect("example2.db", timeout=10)
     # ------------- EJERCICIO 2 -------------
     # # Inicializamos Dataframe "datafreim" con los datos no nulos y coherentes

@@ -1,0 +1,184 @@
+{
+  "usuarios": [
+    {
+      "usuario": "sergio.garcia",
+      "emails_phishing_recibidos": 22,
+      "emails_phishing_clicados": 21,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "luis.munoz",
+      "emails_phishing_recibidos": 22,
+      "emails_phishing_clicados": 14,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "pepe.suarez",
+      "emails_phishing_recibidos": 126,
+      "emails_phishing_clicados": 86,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "julio.martinez",
+      "emails_phishing_recibidos": 226,
+      "emails_phishing_clicados": 117,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "sara.lozano",
+      "emails_phishing_recibidos": 87,
+      "emails_phishing_clicados": 56,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "ines.diaz",
+      "emails_phishing_recibidos": 23,
+      "emails_phishing_clicados": 4,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "juan.lopez",
+      "emails_phishing_recibidos": 93,
+      "emails_phishing_clicados": 46,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "luzmaria.lozano",
+      "emails_phishing_recibidos": 22,
+      "emails_phishing_clicados": 16,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "alicia.castro",
+      "emails_phishing_recibidos": 165,
+      "emails_phishing_clicados": 17,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "directivo",
+      "emails_phishing_recibidos": 143,
+      "emails_phishing_clicados": 4,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "administrador",
+      "emails_phishing_recibidos": 276,
+      "emails_phishing_clicados": 50,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "contacto",
+      "emails_phishing_recibidos": 23,
+      "emails_phishing_clicados": 13,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "no-reply",
+      "emails_phishing_recibidos": 30,
+      "emails_phishing_clicados": 25,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "ceo",
+      "emails_phishing_recibidos": 291,
+      "emails_phishing_clicados": 286,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "contrataciones",
+      "emails_phishing_recibidos": 205,
+      "emails_phishing_clicados": 92,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "legal",
+      "emails_phishing_recibidos": 144,
+      "emails_phishing_clicados": 64,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "inteligencia-artificial",
+      "emails_phishing_recibidos": 133,
+      "emails_phishing_clicados": 19,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "personal",
+      "emails_phishing_recibidos": 1,
+      "emails_phishing_clicados": 0,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "jesus.duarte",
+      "emails_phishing_recibidos": 108,
+      "emails_phishing_clicados": 91,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "raul.perez",
+      "emails_phishing_recibidos": 0,
+      "emails_phishing_clicados": 0,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "javier.osorio",
+      "emails_phishing_recibidos": 33,
+      "emails_phishing_clicados": 31,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "eduardo.galan",
+      "emails_phishing_recibidos": 382,
+      "emails_phishing_clicados": 9,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "enrique.sanz",
+      "emails_phishing_recibidos": 8,
+      "emails_phishing_clicados": 2,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "info",
+      "emails_phishing_recibidos": 93,
+      "emails_phishing_clicados": 24,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "leo.moran",
+      "emails_phishing_recibidos": 49,
+      "emails_phishing_clicados": 3,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "ivan.fernandez",
+      "emails_phishing_recibidos": 60,
+      "emails_phishing_clicados": 46,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "clara.marin",
+      "emails_phishing_recibidos": 372,
+      "emails_phishing_clicados": 301,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "virgnia.cruz",
+      "emails_phishing_recibidos": 21,
+      "emails_phishing_clicados": 9,
+      "vulnerable": 0
+    },
+    {
+      "usuario": "pruebas",
+      "emails_phishing_recibidos": 105,
+      "emails_phishing_clicados": 101,
+      "vulnerable": 1
+    },
+    {
+      "usuario": "fran.moreno",
+      "emails_phishing_recibidos": 17,
+      "emails_phishing_clicados": 2,
+      "vulnerable": 0
+    }
+  ]
+}

@@ -487,9 +487,9 @@
                                             Ver
                                         </button>
                                     </form>
-                                    <button class="btn btn-primary d-none" id="buttonSpam">
+                                    <a class="btn btn-primary d-none" id="buttonSpam">
                                             Ver Spam
-                                    </button>
+                                    </a>
 
                                     <script>
                                         const shortId = (id) => {
@@ -503,25 +503,51 @@
                                                 new FormData(e.target)
                                             )
                                             fetch(`/topUsers?n=${data.num}`).then(res => res.json()).then(data => {
+                                                shortId("titleusuarios").classList.toggle("d-none", false)
+                                                shortId("listusuarios").classList.toggle("d-none", false)
+                                                shortId("titlelow").classList.toggle("d-none", true)
+                                                shortId("listhigh").classList.toggle("d-none",true)
+                                                shortId("titlehigh").classList.toggle("d-none", true)
+                                                shortId("listlow").classList.toggle("d-none", true)
                                                 console.log(data)
                                                 shortId("buttonSpam").classList.toggle("d-none", false)
                                                 // shortId("buttonSpam").classList.toggle("d-inline", true)
                                                 let listausuarios = shortId("listusuarios")
+                                                let listahigh = shortId("listhigh")
+                                                let listalow = shortId("listlow")
                                                 listausuarios.innerHTML = ""
+                                                listahigh.innerHTML=""
+                                                listalow.innerHTML=""
                                                 data.names.forEach(name => {
                                                     let elem = document.createElement("li")
                                                     elem.innerHTML = name
+                                                    console.log(name)
+                                                    let elem2 =elem.cloneNode(true)
                                                     listausuarios.appendChild(elem)
+                                                    if(data.probClick[data.names.indexOf(name)]>0.5){
+                                                        listahigh.appendChild(elem2)
+                                                    }else{
+                                                        listalow.appendChild(elem2)
+                                                    }
+
                                                 })
                                                 shortId("titleusuarios").innerHTML = `Top ${data.num} Usuario${data.num > 1 ? "s" : ""} critico${data.num > 1 ? "s" : ""}`
 
-                                                // AQUÍ
+                                                shortId("titlehigh").innerHTML = `Top users with more than 50%`
+
+                                                shortId("titlelow").innerHTML=`Top users with less than 50%`
+
                                             })
                                             //alert(JSON.stringify(data))
                                         })
 
                                         shortId("buttonSpam").addEventListener("click",() => {
-
+                                            shortId("titleusuarios").classList.toggle("d-none", true)
+                                            shortId("listusuarios").classList.toggle("d-none", true)
+                                            shortId("titlelow").classList.toggle("d-none", false)
+                                            shortId("listhigh").classList.toggle("d-none",false)
+                                            shortId("titlehigh").classList.toggle("d-none", false)
+                                            shortId("listlow").classList.toggle("d-none", false)
                                         })
                                     </script>
 
@@ -535,6 +561,14 @@
                                                     {{usuario}}
                                                 </li>
                                                 {% endfor %}
+                                            </ol>
+                                            <b id="titlehigh" class="d-none">Top 5 usuarios críticos</b>
+                                            <ol id="listhigh" class="d-none">
+
+                                            </ol>
+                                            <b id="titlelow" class="d-none">Top 5 usuarios críticos</b>
+                                            <ol id="listlow" class="d-none">
+
                                             </ol>
                                         </li>
                                         </br>
@@ -568,6 +602,7 @@
                                                     listausuarios.appendChild(elem)
                                                 })
                                                 shortId("titlepages").innerHTML = `Top ${data.num} Pagina${data.num > 1 ? "s" : ""} Vulnerable${data.num > 1 ? "s" : ""}`
+
                                             })
                                             //alert(JSON.stringify(data))
                                         })

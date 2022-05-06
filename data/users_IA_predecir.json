@@ -1,0 +1,154 @@
+{
+  "usuarios": [
+    {
+      "usuario": "sergio.garcia",
+      "emails_phishing_recibidos": 54,
+      "emails_phishing_clicados": 53
+    },
+    {
+      "usuario": "luis.munoz",
+      "emails_phishing_recibidos": 95,
+      "emails_phishing_clicados": 63
+    },
+    {
+      "usuario": "pepe.suarez",
+      "emails_phishing_recibidos": 149,
+      "emails_phishing_clicados": 146
+    },
+    {
+      "usuario": "julio.martinez",
+      "emails_phishing_recibidos": 176,
+      "emails_phishing_clicados": 59
+    },
+    {
+      "usuario": "sara.lozano",
+      "emails_phishing_recibidos": 138,
+      "emails_phishing_clicados": 74
+    },
+    {
+      "usuario": "ines.diaz",
+      "emails_phishing_recibidos": 57,
+      "emails_phishing_clicados": 17
+    },
+    {
+      "usuario": "juan.lopez",
+      "emails_phishing_recibidos": 168,
+      "emails_phishing_clicados": 135
+    },
+    {
+      "usuario": "luzmaria.lozano",
+      "emails_phishing_recibidos": 42,
+      "emails_phishing_clicados": 5
+    },
+    {
+      "usuario": "alicia.castro",
+      "emails_phishing_recibidos": 86,
+      "emails_phishing_clicados": 44
+    },
+    {
+      "usuario": "directivo",
+      "emails_phishing_recibidos": 5,
+      "emails_phishing_clicados": 2
+    },
+    {
+      "usuario": "administrador",
+      "emails_phishing_recibidos": 112,
+      "emails_phishing_clicados": 106
+    },
+    {
+      "usuario": "contacto",
+      "emails_phishing_recibidos": 36,
+      "emails_phishing_clicados": 35
+    },
+    {
+      "usuario": "no-reply",
+      "emails_phishing_recibidos": 112,
+      "emails_phishing_clicados": 85
+    },
+    {
+      "usuario": "ceo",
+      "emails_phishing_recibidos": 140,
+      "emails_phishing_clicados": 131
+    },
+    {
+      "usuario": "contrataciones",
+      "emails_phishing_recibidos": 24,
+      "emails_phishing_clicados": 23
+    },
+    {
+      "usuario": "legal",
+      "emails_phishing_recibidos": 32,
+      "emails_phishing_clicados": 20
+    },
+    {
+      "usuario": "inteligencia-artificial",
+      "emails_phishing_recibidos": 155,
+      "emails_phishing_clicados": 27
+    },
+    {
+      "usuario": "personal",
+      "emails_phishing_recibidos": 190,
+      "emails_phishing_clicados": 145
+    },
+    {
+      "usuario": "jesus.duarte",
+      "emails_phishing_recibidos": 140,
+      "emails_phishing_clicados": 119
+    },
+    {
+      "usuario": "raul.perez",
+      "emails_phishing_recibidos": 160,
+      "emails_phishing_clicados": 109
+    },
+    {
+      "usuario": "javier.osorio",
+      "emails_phishing_recibidos": 108,
+      "emails_phishing_clicados": 38
+    },
+    {
+      "usuario": "eduardo.galan",
+      "emails_phishing_recibidos": 84,
+      "emails_phishing_clicados": 45
+    },
+    {
+      "usuario": "enrique.sanz",
+      "emails_phishing_recibidos": 119,
+      "emails_phishing_clicados": 113
+    },
+    {
+      "usuario": "info",
+      "emails_phishing_recibidos": 182,
+      "emails_phishing_clicados": 111
+    },
+    {
+      "usuario": "leo.moran",
+      "emails_phishing_recibidos": 39,
+      "emails_phishing_clicados": 2
+    },
+    {
+      "usuario": "ivan.fernandez",
+      "emails_phishing_recibidos": 44,
+      "emails_phishing_clicados": 15
+    },
+    {
+      "usuario": "clara.marin",
+      "emails_phishing_recibidos": 198,
+      "emails_phishing_clicados": 134
+    },
+    {
+      "usuario": "virgnia.cruz",
+      "emails_phishing_recibidos": 99,
+      "emails_phishing_clicados": 66
+    },
+    {
+      "usuario": "pruebas",
+      "emails_phishing_recibidos": 111,
+      "emails_phishing_clicados": 27
+    },
+    {
+      "usuario": "fran.moreno",
+      "emails_phishing_recibidos": 40,
+      "emails_phishing_clicados": 25
+    }
+  ]
+}
