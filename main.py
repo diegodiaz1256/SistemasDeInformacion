@@ -8,9 +8,12 @@ import pandas as pd
 import plotly.express as px
 import plotly
 import requests as req
-from sklearn import datasets, linear_model
+from sklearn import datasets, linear_model, tree
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import mean_squared_error, r2_score
-
+import graphviz
+from sklearn.tree import export_graphviz
+from subprocess import call
 
 app = Flask(__name__)
 
@@ -219,7 +222,7 @@ def IA():
         phishing = e["emails_phishing_recibidos"]
         clickado = e["emails_phishing_clicados"]
         vulnerable = e["vulnerable"]
-        train_x.append([phishing,clickado])
+        train_x.append([phishing, clickado])
         train_y.append(vulnerable)
 
     training_x = train_x[:-6]
@@ -228,27 +231,68 @@ def IA():
     users_y = train_y[-6:]
 
     regr = linear_model.LinearRegression()
-
     regr.fit(training_x, training_y)
     prediccion = regr.predict(users_x)
     # The mean squared error
 
+    prediccionv2 = []
+
     for i in range(len(prediccion)):
         if prediccion[i] >= 0.5:
-            prediccion[i] = 1
-        else:
-            prediccion[i] = 0
+            prediccionv2.append(int(1))
 
+        else:
+            prediccionv2.append(int(0))
+
+    print("prediccion:", prediccion)
+    usersxv2 =[]
+    for i in range(len(users_x)):
+
+        usersxv2.append( users_x[i][1]/users_x[i][0])
+
+    print(len(users_y))
+    plt.scatter(usersxv2, users_y, color="black")
+    plt.plot(usersxv2, prediccionv2, color="blue", linewidth=2)
+    plt.xticks(())
+    plt.yticks(())
+    plt.show()
     print(prediccion)
     print("Mean squared error: %.2f" % mean_squared_error(users_y, prediccion))
     print("Users x:", users_x)
     print("Users y:", users_y)
     print("Prediccion:", prediccion)
-    plt.scatter(users_x, users_y, color="black")
-    plt.plot(users_x, prediccion, color="blue", linewidth=3)
-    plt.xticks(())
-    plt.yticks(())
-    plt.show()
+    print(len(users_x))
+
+    # Árbol de decisión
+    arbol = tree.DecisionTreeClassifier()
+    clf = arbol.fit(training_x, training_y)
+
+    arbol_predict = tree.DecisionTreeClassifier()
+    res_arbol = arbol_predict.fit(training_x, training_y)
+    print("predict arobol:", training_y, training_x)
+    dot_data = tree.export_graphviz(clf, out_file=None)
+    graph = graphviz.Source(dot_data)
+    graph.render("Árbol")
+    dot_data = tree.export_graphviz(clf, out_file=None,
+                                    filled=True, rounded=True,
+                                    special_characters=True)
+    graph = graphviz.Source(dot_data)
+    graph.render('test.gv', view=True).replace('\\', '/')
+
+
+    # Random Forest
+    forest = RandomForestClassifier(max_depth=2, random_state=0, n_estimators=10)
+    forest.fit(training_x, training_y)
+    print(str(training_x[0]) + " " + str(training_y[0]))
+    print(forest.predict([training_x[0]]))
+
+    for i in range(len(forest.estimators_)):
+        estimator = forest.estimators_[i]
+        export_graphviz(estimator,
+                    out_file='tree.dot',
+                    rounded=True, proportion=False,
+                    precision=2, filled=True)
+        call(['dot','-Tpng', 'tree.dot','-o','tree' + str(i) + '.png','-Gdpi=600'])
 
     # for e in predecirData["usuarios"]:
     #     usuario = e["usuario"]
