@@ -8,12 +8,13 @@ import pandas as pd
 import plotly.express as px
 import plotly
 import requests as req
-from sklearn import datasets, linear_model, tree
+from sklearn import linear_model, tree
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, accuracy_score
 import graphviz
 from sklearn.tree import export_graphviz
 from subprocess import call
+import PIL
 
 app = Flask(__name__)
 
@@ -208,9 +209,122 @@ def cve_info():
     return jsonify(data.json())
 
 
-def IA():
+def linearRegression(training_x, training_y, users_x, users_y, datos_reales):
+    # Regresión Lineal
+    regr = linear_model.LinearRegression()
+    regr.fit(training_x, training_y)
+    prediccion = regr.predict(users_x)
+
+    prediccionv2 = []
+    for i in range(len(prediccion)):
+        if prediccion[i] >= 0.5:
+            prediccionv2.append(int(1))
+        else:
+            prediccionv2.append(int(0))
+
+    usersxv2 = []
+    for i in range(len(users_x)):
+        if users_x[i][0] == 0:
+            usersxv2.append(0)
+        else:
+            usersxv2.append(users_x[i][1] / users_x[i][0])
+
+    a = r2_score(users_y, prediccionv2)
+    b = regr.intercept_
+    recta = (np.array(usersxv2) * a) + b
+
+    plt.scatter(usersxv2, users_y, color="black")
+    plt.plot(recta, usersxv2, color="purple", linewidth=2)
+    plt.xticks(())
+    plt.yticks(())
+    plt.show()
+
+    print("REGRESIÓN LINEAL")
+    print("Mean squared error: %.2f" % mean_squared_error(users_y, prediccionv2))
+    print("Porcentaje de aciertos: %.2f" % accuracy_score(users_y, prediccionv2))
+
+    prediccion_real = regr.predict(datos_reales)
+    prediccion_realv2 = []
+    for i in range(len(prediccion_real)):
+        if prediccion_real[i] >= 0.5:
+            prediccion_realv2.append(int(1))
+        else:
+            prediccion_realv2.append(int(0))
+
+    print("Predicción sobre los datos reales: hay", prediccion_realv2.count(1), " usuarios vulnerables y ",
+          prediccion_realv2.count(0), " no vulnerables")
+    print("")
+
+
+def decisionTree(training_x, training_y, users_x, users_y, datos_reales):
+    # Árbol de decisión
+    arbol = tree.DecisionTreeClassifier()
+    clf = arbol.fit(training_x, training_y)
+
+    res_arbol = arbol.predict(users_x)
+
+    dot_data = tree.export_graphviz(clf, out_file=None)
+    graph = graphviz.Source(dot_data)
+    graph.render("Árbol")
+    dot_data = tree.export_graphviz(clf, out_file=None,
+                                    filled=True, rounded=True,
+                                    special_characters=True)
+    graph = graphviz.Source(dot_data)
+    # TODO: graph.render('test.gv', view=True).replace('\\', '/')
+
+    print("ÁRBOL DE DECISIÓN")
+    print("Mean squared error: %.2f" % mean_squared_error(users_y, res_arbol))
+    print("Porcentaje de aciertos: %.2f" % accuracy_score(users_y, res_arbol))
+
+    prediccion_real = arbol.predict(datos_reales)
+    prediccion_realv2 = []
+    for i in range(len(prediccion_real)):
+        if prediccion_real[i] >= 0.5:
+            prediccion_realv2.append(int(1))
+        else:
+            prediccion_realv2.append(int(0))
+
+    print("Predicción sobre los datos reales: hay", prediccion_realv2.count(1), " usuarios vulnerables y ",
+          prediccion_realv2.count(0), " no vulnerables")
+    print("")
+
+
+def randomForest(training_x, training_y, users_x, users_y, datos_reales):
+    # Random Forest
+    forest = RandomForestClassifier(max_depth=2, random_state=0, n_estimators=10)
+    forest.fit(training_x, training_y)
+    # print(str(training_x[0]) + " " + str(training_y[0]))
+    res = forest.predict(users_x)
+
+    for i in range(len(forest.estimators_)):
+        estimator = forest.estimators_[i]
+        export_graphviz(estimator,
+                        out_file='tree.dot',
+                        rounded=True, proportion=False,
+                        precision=2, filled=True)
+        call(['dot', '-Tpng', 'tree.dot', '-o', 'tree' + str(i) + '.png', '-Gdpi=600'])
+
+    print("RANDOM FOREST")
+    print("Mean squared error: %.2f" % mean_squared_error(users_y, res))
+    print("Porcentaje de aciertos: %.2f" % accuracy_score(users_y, res))
+
+    prediccion_real = forest.predict(datos_reales)
+    prediccion_realv2 = []
+    for i in range(len(prediccion_real)):
+        if prediccion_real[i] >= 0.5:
+            prediccion_realv2.append(int(1))
+        else:
+            prediccion_realv2.append(int(0))
+
+    print("Predicción sobre los datos reales: hay", prediccion_realv2.count(1), " usuarios vulnerables y ",
+          prediccion_realv2.count(0), " no vulnerables")
+    print("")
+
+
+def IA():  # datos para predecir se pasarian aqui (predecir)
+    # Abrir y cargar datos
     clases = open("data/users_IA_clases.json")
-    predecir = open("data/users_IA_predecir.json")
+    predecir = open("data/users_IA_predecir.json")  ##Esta linea fuera cuando carguemos desde parametro
     clasesData = json.load(clases)
     predecirData = json.load(predecir)
 
@@ -225,81 +339,31 @@ def IA():
         train_x.append([phishing, clickado])
         train_y.append(vulnerable)
 
-    training_x = train_x[:-6]
-    training_y = train_y[:-6]
-    users_x = train_x[-6:]
-    users_y = train_y[-6:]
+    datos_reales = []
 
-    regr = linear_model.LinearRegression()
-    regr.fit(training_x, training_y)
-    prediccion = regr.predict(users_x)
-    # The mean squared error
+    for e in predecirData["usuarios"]:
+        usuario = e["usuario"]
+        phishing = e["emails_phishing_recibidos"]
+        clickado = e["emails_phishing_clicados"]
+        datos_reales.append([phishing, clickado])
 
-    prediccionv2 = []
+    # Separar los datos
+    tope = int(len(train_x) * 0.7)
+    training_x = train_x[:tope]
+    training_y = train_y[:tope]
+    users_x = train_x[tope:]
+    users_y = train_y[tope:]
 
-    for i in range(len(prediccion)):
-        if prediccion[i] >= 0.5:
-            prediccionv2.append(int(1))
-
-        else:
-            prediccionv2.append(int(0))
-
-    print("prediccion:", prediccion)
-    usersxv2 =[]
-    for i in range(len(users_x)):
-
-        usersxv2.append( users_x[i][1]/users_x[i][0])
-
-    print(len(users_y))
-    plt.scatter(usersxv2, users_y, color="black")
-    plt.plot(usersxv2, prediccionv2, color="blue", linewidth=2)
-    plt.xticks(())
-    plt.yticks(())
-    plt.show()
-    print(prediccion)
-    print("Mean squared error: %.2f" % mean_squared_error(users_y, prediccion))
-    print("Users x:", users_x)
-    print("Users y:", users_y)
-    print("Prediccion:", prediccion)
-    print(len(users_x))
-
-    # Árbol de decisión
-    arbol = tree.DecisionTreeClassifier()
-    clf = arbol.fit(training_x, training_y)
-
-    arbol_predict = tree.DecisionTreeClassifier()
-    res_arbol = arbol_predict.fit(training_x, training_y)
-    print("predict arobol:", training_y, training_x)
-    dot_data = tree.export_graphviz(clf, out_file=None)
-    graph = graphviz.Source(dot_data)
-    graph.render("Árbol")
-    dot_data = tree.export_graphviz(clf, out_file=None,
-                                    filled=True, rounded=True,
-                                    special_characters=True)
-    graph = graphviz.Source(dot_data)
-    graph.render('test.gv', view=True).replace('\\', '/')
+    # Entrenar y predecir con los diferentes modelos
+    linearRegression(training_x, training_y, users_x, users_y, datos_reales)
+    decisionTree(training_x, training_y, users_x, users_y, datos_reales)
+    randomForest(training_x, training_y, users_x, users_y, datos_reales)
 
 
-    # Random Forest
-    forest = RandomForestClassifier(max_depth=2, random_state=0, n_estimators=10)
-    forest.fit(training_x, training_y)
-    print(str(training_x[0]) + " " + str(training_y[0]))
-    print(forest.predict([training_x[0]]))
-
-    for i in range(len(forest.estimators_)):
-        estimator = forest.estimators_[i]
-        export_graphviz(estimator,
-                    out_file='tree.dot',
-                    rounded=True, proportion=False,
-                    precision=2, filled=True)
-        call(['dot','-Tpng', 'tree.dot','-o','tree' + str(i) + '.png','-Gdpi=600'])
-
-    # for e in predecirData["usuarios"]:
-    #     usuario = e["usuario"]
-    #     phishing = e["emails_phishing_recibidos"]
-    #     clickado = e["emails_phishing_clicados"]
-    #     users_x.append([phishing,clickado])
-
+@app.route('/checkUsers', methods=['POST'])
+def checkUsers():
+    print(request.files)
+    pass
 
 
 # ------------- EJERCICIOS 2, 3 Y 4 -------------
