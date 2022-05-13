@@ -714,22 +714,14 @@
                                     <button onclick="abrirtodo()">Generar Reporte</button><br>
                                     <p><b>Selecciona un archivo JSON para analizar la criticidad de los usuarios:</b></p>
                                     &emsp;&emsp;<input id="image-file" type="file" onchange="SendUsers(this)" >
-                                    <a class="btn btn-primary d-none" id="buttonSpam2">
-                                            Ver Spam
-                                    </a>
-                                    <b id="titleusuarios2">Top 5 usuarios críticos</b>
-                                            <ol id="listusuarios2">
-                                                {% for usuario in practica2ej2.usuarios %}
-                                                <li>
-                                                    {{usuario}}
-                                                </li>
-                                                {% endfor %}
-                                            </ol>
-                                            <b id="titlehigh2" class="d-none">Top 5 usuarios críticos</b>
+
+
+<br>
+                                            <b id="titlehigh2" class="d-none">Vulnerables</b>
                                             <ol id="listhigh2" class="d-none">
 
                                             </ol>
-                                            <b id="titlelow2" class="d-none">Top 5 usuarios críticos</b>
+                                            <b id="titlelow2" class="d-none">No Vulnerables</b>
                                             <ol id="listlow2" class="d-none">
 
                                             </ol>
@@ -752,7 +744,7 @@
                                         const element = document.getElementById('all');
                                         var opt = {
                                           margin:       1,
-                                          filename:     'myfile.pdf',
+                                          filename:     'reporte.pdf',
                                           image:        { type: 'jpeg', quality: 0.98 },
                                           html2canvas:  { scale: 2 },
                                           jsPDF:        { unit: 'in', format: 'a2', orientation: 'portrait' }
@@ -779,42 +771,36 @@
                                         try {
                                            let r = await fetch('/checkUsers',
                                              {method: "POST", body: formData, signal: ctrl.signal});
-                                           const res = await r.json()
-                                            console.log(res)
+                                           const data = await r.json()
 
-                                            shortId("titleusuarios2").classList.toggle("d-none", false)
-                                            shortId("listusuarios2").classList.toggle("d-none", false)
-                                            shortId("titlelow2").classList.toggle("d-none", true)
-                                            shortId("listhigh2").classList.toggle("d-none",true)
-                                            shortId("titlehigh2").classList.toggle("d-none", true)
-                                            shortId("listlow2").classList.toggle("d-none", true)
-                                            console.log(data)
-                                            shortId("buttonSpam2").classList.toggle("d-none", false)
-                                            // shortId("buttonSpam").classList.toggle("d-inline", true)
-                                            let listausuarios = shortId("listusuarios2")
+
+
+                                            shortId("titlelow2").classList.toggle("d-none", false)
+                                            shortId("listhigh2").classList.toggle("d-none",false)
+                                            shortId("titlehigh2").classList.toggle("d-none", false)
+                                            shortId("listlow2").classList.toggle("d-none", false)
+                                            //console.log(data)
+
+
                                             let listahigh = shortId("listhigh2")
                                             let listalow = shortId("listlow2")
-                                            listausuarios.innerHTML = ""
+
                                             listahigh.innerHTML=""
                                             listalow.innerHTML=""
-                                            data.names.forEach(name => {
+                                            data.prediccion.usuarios.forEach(user => {
                                                 let elem = document.createElement("li")
-                                                elem.innerHTML = name
-                                                console.log(name)
+
+                                                elem.innerHTML = user.usuario
+                                                //console.log(user)
                                                 let elem2 =elem.cloneNode(true)
-                                                listausuarios.appendChild(elem)
-                                                if(data.probClick[data.names.indexOf(name)]>0.5){
-                                                    listahigh.appendChild(elem2)
-                                                }else{
-                                                    listalow.appendChild(elem2)
+                                                if(user.vulnerable){
+                                                    listahigh.appendChild(elem)
+                                                }else {
+                                                    listalow.appendChild(elem)
                                                 }
 
                                             })
-                                            shortId("titleusuarios2").innerHTML = `Top ${data.num} Usuario${data.num > 1 ? "s" : ""} critico${data.num > 1 ? "s" : ""}`
 
-                                            shortId("titlehigh2").innerHTML = `Top users with more than 50%`
-
-                                            shortId("titlelow2").innerHTML=`Top users with less than 50%`
 
 
                                            console.log('HTTP response code:',r.status);
