@@ -237,7 +237,7 @@
                             </div>
                             <h1>1. Ánalisis de los datos</h1>
                             <hr>
-                            <div class="card card-primary collapsed-card">
+                            <div class="card card-primary  ">
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicio 2</h3>
                                     <div class="card-tools">
@@ -277,7 +277,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card card-primary collapsed-card">
+                            <div class="card card-primary  ">
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicio 3</h3>
                                     <div class="card-tools">
@@ -338,136 +338,12 @@
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="card card-primary collapsed-card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Ejercicio 4</h3>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                                class="fas fa-plus"></i></button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Top usuarios críticos</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {% if grafico4_1 %}
-                                            <div id='chart1' class='chart' ”></div>
-                                            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-                                            <script type='text/javascript'>
-                                                var graphs = {{grafico4_1 | safe}}
-                                                Plotly.plot('chart1', graphs, {});
-                                            </script>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Páginas web con las políticas más
-                                                desactualizadas</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {% if grafico4_2 %}
-                                            <div id='chart2' class='chart' ”></div>
-                                            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-                                            <script type='text/javascript'>
-                                                var graphs = {{grafico4_2 | safe}}
-                                                Plotly.plot('chart2', graphs, {});
-                                            </script>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Conexiones de usuarios con contraseña vulnerable vs
-                                                no vulnerables</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {% if grafico4_3 %}
-                                            <div id='chart3' class='chart' ”></div>
-                                            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-                                            <script type='text/javascript'>
-                                                var graphs = {{grafico4_3 | safe}}
-                                                Plotly.plot('chart3', graphs, {});
-                                            </script>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Evolución de la creación de páginas web</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {% if grafico4_41 %}
-                                            <div id='chart41' class='chart' ”></div>
-                                            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-                                            <script type='text/javascript'>
-                                                var graphs = {{grafico4_41 | safe}}
-                                                Plotly.plot('chart41', graphs, {});
-                                                // var graphs = {{grafico4_42 | safe}}
-                                                //
-                                                // Plotly.plot('chart42', graphs, {});
-                                            </script>
-                                            {% endif %}
-                                            {% if grafico4_42 %}
-                                            <div id='chart42' class='chart' ”></div>
-                                            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-                                            <script type='text/javascript'>
-                                                var graphs = {{grafico4_42 | safe}}
-
-                                                Plotly.plot('chart42', graphs, {});
-                                            </script>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Contraseñas comprometidas vs No comprometidas</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {% if grafico4_5 %}
-                                            <div id='chart5' class='chart' ”></div>
-                                            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-                                            <script type='text/javascript'>
-                                                var graphs = {{grafico4_5 | safe}}
-
-                                                Plotly.plot('chart5', graphs, {});
-                                            </script>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
                             </br></br>
                             <h1>
                                 2. Representación de los datos
                             </h1>
                             <hr>
-                            <div class="card card-primary collapsed-card">
+                            <div class="card card-primary  ">
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicios 2 y 3</h3>
                                     <div class="card-tools">
@@ -551,16 +427,9 @@
                                         })
                                     </script>
 
-                                    </br></br>
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Usuarios críticos</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
+                                    </br></br></br></br>
+                                    <ul>
+                                        <li>
                                             <b id="titleusuarios">Top 5 usuarios críticos</b>
                                             <ol id="listusuarios">
                                                 {% for usuario in practica2ej2.usuarios %}
@@ -577,10 +446,9 @@
                                             <ol id="listlow" class="d-none">
 
                                             </ol>
-                                        </div>
-                                    </div>
-                                    </br></br>
-
+                                        </li>
+                                        </br>
+                                    </ul>
                                     <form id="top_x_pagsvuln">
                                         <div class="form-group">
                                             <label>¿Cuántas paginas vulnerables quieres ver?</label></br>
@@ -616,17 +484,9 @@
                                         })
 
                                     </script>
-                                    </br></br>
-
-                                    <div class="card card-dark collapsed-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Páginas vulnerables</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                    <i class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
+                                    </br></br></br></br>
+                                    <ul>
+                                        <li>
                                             <b id="titlepages">Top 5 páginas vulnerables</b>
                                             <ol id="listpages">
                                                 {% for pagina in practica2ej2.paginas %}
@@ -635,11 +495,11 @@
                                                 </li>
                                                 {% endfor %}
                                             </ol>
-                                        </div>
-                                    </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="card card-primary collapsed-card">
+                            <div class="card card-primary  ">
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicio 4</h3>
                                     <div class="card-tools">
@@ -687,20 +547,20 @@
 
                                     <br>
                                     <ul>
+                                        <li>
+                                            <b>Ultimas 10 Vulnerabilidades</b>
+                                            <div id="loader" class="loader"></div>
+                                            <ol id="listvulnerabilidades">
 
-                                        <h3>Ultimas 10 Vulnerabilidades</h3>
-                                        <div id="loader" class="loader"></div>
-                                        <ol id="listvulnerabilidades">
-
-                                        </ol>
-
+                                            </ol>
+                                        </li>
 
                                     </ul>
 
 
                                 </div>
                             </div>
-                        <div class="card card-primary collapsed-card">
+                        <div class="card card-primary  ">
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicio 5</h3>
                                     <div class="card-tools">
@@ -709,21 +569,10 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <button onclick="abrirtodo()">testabrirtodo</button>
                                     <p><b>Selecciona un archivo JSON para analizar la criticidad de los usuarios:</b></p>
                                     &emsp;&emsp;<input id="image-file" type="file" onchange="SendUsers(this)" >
                                 </div>
                                 <script>
-                                    const abrirtodo=()=>{
-                                        let cosas =Array.from(document.getElementsByClassName("collapsed-card"))
-                                        cosas.forEach(e=>{
-                                            e.classList.toggle("collapsed-card", false)
-                                        })
-
-                                        //.forEach((e)=>{
-                                        //    e.classList.toggle("collapsed-card", false
-                                        //})
-                                    }
                                     const SendUsers=async (file)=>{
                                         let formData = new FormData();
                                         let data = file.files[0];
@@ -746,7 +595,7 @@
 
                                 </script>
                         </div>
-                        <div class="card card-primary collapsed-card">
+                        <div class="card card-primary  ">
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicio 6</h3>
                                     <div class="card-tools">

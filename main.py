@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from dotmap import DotMap
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, make_response
 import sqlite3
 import json
 import pandas as pd
@@ -15,6 +15,7 @@ import graphviz
 from sklearn.tree import export_graphviz
 from subprocess import call
 import PIL
+import pdfkit
 
 app = Flask(__name__)
 
@@ -255,6 +256,8 @@ def linearRegression(training_x, training_y, users_x, users_y, datos_reales):
           prediccion_realv2.count(0), " no vulnerables")
     print("")
 
+    return [mean_squared_error(users_y, prediccionv2), accuracy_score(users_y, prediccionv2), prediccion_realv2.count(1), prediccion_realv2.count(0)]
+
 
 def decisionTree(training_x, training_y, users_x, users_y, datos_reales):
     # Árbol de decisión
@@ -288,6 +291,9 @@ def decisionTree(training_x, training_y, users_x, users_y, datos_reales):
           prediccion_realv2.count(0), " no vulnerables")
     print("")
 
+    return [mean_squared_error(users_y, res_arbol), accuracy_score(users_y, res_arbol),
+            prediccion_realv2.count(1), prediccion_realv2.count(0), prediccion_realv2]
+
 
 def randomForest(training_x, training_y, users_x, users_y, datos_reales):
     # Random Forest
@@ -320,13 +326,18 @@ def randomForest(training_x, training_y, users_x, users_y, datos_reales):
           prediccion_realv2.count(0), " no vulnerables")
     print("")
 
+    return [mean_squared_error(users_y, res), accuracy_score(users_y, res),
+            prediccion_realv2.count(1), prediccion_realv2.count(0)]
 
-def IA():  # datos para predecir se pasarian aqui (predecir)
+
+def IA(predecir2):  # datos para predecir se pasarian aqui (predecir)
     # Abrir y cargar datos
     clases = open("data/users_IA_clases.json")
     predecir = open("data/users_IA_predecir.json")  ##Esta linea fuera cuando carguemos desde parametro
     clasesData = json.load(clases)
     predecirData = json.load(predecir)
+
+
 
     train_x = []
     train_y = []
@@ -340,7 +351,8 @@ def IA():  # datos para predecir se pasarian aqui (predecir)
         train_y.append(vulnerable)
 
     datos_reales = []
-
+    if predecir2:
+        predecirData=predecir2
     for e in predecirData["usuarios"]:
         usuario = e["usuario"]
         phishing = e["emails_phishing_recibidos"]
@@ -355,42 +367,70 @@ def IA():  # datos para predecir se pasarian aqui (predecir)
     users_y = train_y[tope:]
 
     # Entrenar y predecir con los diferentes modelos
-    linearRegression(training_x, training_y, users_x, users_y, datos_reales)
-    decisionTree(training_x, training_y, users_x, users_y, datos_reales)
-    randomForest(training_x, training_y, users_x, users_y, datos_reales)
+    if predecir2:
+        return decisionTree(training_x, training_y, users_x, users_y, datos_reales)
+    lin = linearRegression(training_x, training_y, users_x, users_y, datos_reales)
+    tree = decisionTree(training_x, training_y, users_x, users_y, datos_reales)
+    forest = randomForest(training_x, training_y, users_x, users_y, datos_reales)
+
+    return [lin,tree,forest]
 
 
 @app.route('/checkUsers', methods=['POST'])
 def checkUsers():
-    print(request.files)
-    pass
+    archivo = request.files["data"]
+    data = archivo.stream.read()
+    prediccion = json.loads(data)
+    resultados=IA(prediccion)
+    print(len(resultados))
+    print("resultados IA JSOn: ", resultados)
+    for i in range(len(prediccion["usuarios"])):
+        prediccion["usuarios"][i]["vulnerable"] = resultados[4][i]
+        pass
+    salida = {
+        "criticos" : resultados[2],
+        "no criticos": resultados[3],
+        "prediccion": prediccion
+    }
+    return json.dumps(salida)
 
 
 # ------------- EJERCICIOS 2, 3 Y 4 -------------
 @app.route('/dataframe', methods=['GET'])
 def dataframe():
-    IA()
+
+    ia_data = IA(None)
+    reg = {
+        "aciertos": round(ia_data[0][1],2)*100,
+        "error": round(ia_data[0][0],2)*100,
+        "numvuln": ia_data[0][2],
+        "numnovuln": ia_data[0][3]
+
+    }
+    reg = DotMap(reg)
+
+    tree = {
+        "aciertos": round(ia_data[1][1],2)*100,
+        "error": round(ia_data[1][0],2)*100,
+        "numvuln": ia_data[1][2],
+        "numnovuln": ia_data[1][3]
+
+    }
+    tree = DotMap(tree)
+
+    forest = {
+        "aciertos": round(ia_data[2][1],2)*100,
+        "error": round(ia_data[2][0],2)*100,
+        "numvuln": ia_data[2][2],
+        "numnovuln": ia_data[2][3]
+
+    }
+    forest = DotMap(forest)
+
     con = sqlite3.connect("example2.db", timeout=10)
-    # ------------- EJERCICIO 2 -------------
-    # # Inicializamos Dataframe "datafreim" con los datos no nulos y coherentes
-    # query = pd.read_sql_query(
-    #     'SELECT u.*, i.ip, i.fecha, e.total, e.phising, e.clicados FROM users u JOIN ips i ON u.name=i.name '
-    #     'JOIN emails e ON u.name=e.name WHERE u.provincia != "None" AND '
-    #     'u.telefono != "None" AND i.ip LIKE "%.%.%.%"', con, "name")
-    # datafreim = pd.DataFrame(query,
-    #                          columns=["name", "telefono", "contrasena", "provincia", "permisos", "ip", "fecha", "total",
-    #                                   "phising", "clicados"])
-    #
-    # datafreim = datafreim.drop("name", axis=1)
-    # print(datafreim)
 
     datafreim = df_datafreim()
     original = df_original()
-
-    # Dataframe "original" con una fila por usuario, con los datos bidimensionales (IPs, Fechas) cargados como arrays
-    # original = datafreim.groupby(["name"], dropna=False).agg(
-    #     {"fecha": np.array, "ip": np.array, "telefono": "first", "contrasena": "first", "provincia": "first",
-    #      "permisos": "first", "total": "first", "phising": "first", "clicados": "first"})
 
     # Agrupaciones
     fecha = datafreim.groupby(["name"], dropna=True).agg({"fecha": "count"})
@@ -630,9 +670,10 @@ def dataframe():
     listaTop5Criticos = DotMap(listaTop5Criticos)
 
     con.close()
+
     return render_template('index.html', ejer2=ejer2, ejer3=ejer3, practica2ej2=listaTop5Criticos,
                            grafico4_1=grafico4_1, grafico4_2=grafico4_2, grafico4_3=grafico4_3, grafico4_41=grafico4_41,
-                           grafico4_42=grafico4_42, grafico4_5=grafico4_5)
+                           grafico4_42=grafico4_42, grafico4_5=grafico4_5, reg=reg, forest=forest, tree=tree)
     # con.close()
     # return render_template('index.html', ejer2=ejer2, ejer3=ejer3)
 
