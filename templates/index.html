@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" id="all">
 
-<head>
+<head id="head">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body id="print" class="sidebar-collapse">
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light sticky-top">
     <!-- Left navbar links -->
@@ -643,7 +643,7 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Ejercicio 4</h3>
                                     <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="but" class="fas fa-plus"></i></button>
                                     </div>
                                 </div>
                                 <div class="card-body" style="display: none;">
@@ -657,6 +657,7 @@
 <!--                                        </button>-->
 <!--                                    </form>-->
                                     <script>
+
                                         const checkCVE= ()=>{
                                             shortId("loader").classList.toggle("d-none", false)
                                             const listavuln = shortId("listvulnerabilidades")
@@ -675,7 +676,7 @@
                                                 })
                                         }
                                         window.addEventListener("DOMContentLoaded", checkCVE)
-                                        setInterval(checkCVE, 20000)
+                                        let intervalo = setInterval(checkCVE, 20000)
 
                                         // setInterval(()=>{
                                         //     fetch("/cveinfo")
@@ -709,21 +710,62 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <button onclick="abrirtodo()">testabrirtodo</button>
+                                    <p><b>Generar un reporte en PDF:</b></p>
+                                    <button onclick="abrirtodo()">Generar Reporte</button><br>
                                     <p><b>Selecciona un archivo JSON para analizar la criticidad de los usuarios:</b></p>
                                     &emsp;&emsp;<input id="image-file" type="file" onchange="SendUsers(this)" >
+                                    <a class="btn btn-primary d-none" id="buttonSpam2">
+                                            Ver Spam
+                                    </a>
+                                    <b id="titleusuarios2">Top 5 usuarios críticos</b>
+                                            <ol id="listusuarios2">
+                                                {% for usuario in practica2ej2.usuarios %}
+                                                <li>
+                                                    {{usuario}}
+                                                </li>
+                                                {% endfor %}
+                                            </ol>
+                                            <b id="titlehigh2" class="d-none">Top 5 usuarios críticos</b>
+                                            <ol id="listhigh2" class="d-none">
+
+                                            </ol>
+                                            <b id="titlelow2" class="d-none">Top 5 usuarios críticos</b>
+                                            <ol id="listlow2" class="d-none">
+
+                                            </ol>
                                 </div>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.4/jspdf.plugin.autotable.min.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                                 <script>
+
                                     const abrirtodo=()=>{
+                                        clearInterval(intervalo)
+                                        shortId("but").click()
+                                        shortId("print").classList.toggle("sidebar-collapse", true)
                                         let cosas =Array.from(document.getElementsByClassName("collapsed-card"))
                                         cosas.forEach(e=>{
+                                            console.log(e)
                                             e.classList.toggle("collapsed-card", false)
                                         })
+                                        const element = document.getElementById('all');
+                                        var opt = {
+                                          margin:       1,
+                                          filename:     'myfile.pdf',
+                                          image:        { type: 'jpeg', quality: 0.98 },
+                                          html2canvas:  { scale: 2 },
+                                          jsPDF:        { unit: 'in', format: 'a2', orientation: 'portrait' }
+                                        };
+                                        html2pdf().set(opt).from(element).save()
+                                        intervalo=setInterval(checkCVE, 20000)
+                                        //getPDF()
 
                                         //.forEach((e)=>{
                                         //    e.classList.toggle("collapsed-card", false
                                         //})
                                     }
+
                                     const SendUsers=async (file)=>{
                                         let formData = new FormData();
                                         let data = file.files[0];
@@ -737,7 +779,44 @@
                                         try {
                                            let r = await fetch('/checkUsers',
                                              {method: "POST", body: formData, signal: ctrl.signal});
-                                           console.log(await r.json())
+                                           const res = await r.json()
+                                            console.log(res)
+
+                                            shortId("titleusuarios2").classList.toggle("d-none", false)
+                                            shortId("listusuarios2").classList.toggle("d-none", false)
+                                            shortId("titlelow2").classList.toggle("d-none", true)
+                                            shortId("listhigh2").classList.toggle("d-none",true)
+                                            shortId("titlehigh2").classList.toggle("d-none", true)
+                                            shortId("listlow2").classList.toggle("d-none", true)
+                                            console.log(data)
+                                            shortId("buttonSpam2").classList.toggle("d-none", false)
+                                            // shortId("buttonSpam").classList.toggle("d-inline", true)
+                                            let listausuarios = shortId("listusuarios2")
+                                            let listahigh = shortId("listhigh2")
+                                            let listalow = shortId("listlow2")
+                                            listausuarios.innerHTML = ""
+                                            listahigh.innerHTML=""
+                                            listalow.innerHTML=""
+                                            data.names.forEach(name => {
+                                                let elem = document.createElement("li")
+                                                elem.innerHTML = name
+                                                console.log(name)
+                                                let elem2 =elem.cloneNode(true)
+                                                listausuarios.appendChild(elem)
+                                                if(data.probClick[data.names.indexOf(name)]>0.5){
+                                                    listahigh.appendChild(elem2)
+                                                }else{
+                                                    listalow.appendChild(elem2)
+                                                }
+
+                                            })
+                                            shortId("titleusuarios2").innerHTML = `Top ${data.num} Usuario${data.num > 1 ? "s" : ""} critico${data.num > 1 ? "s" : ""}`
+
+                                            shortId("titlehigh2").innerHTML = `Top users with more than 50%`
+
+                                            shortId("titlelow2").innerHTML=`Top users with less than 50%`
+
+
                                            console.log('HTTP response code:',r.status);
                                         } catch(e) {
                                            console.log('Huston we have problem...:', e);

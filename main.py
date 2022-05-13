@@ -15,7 +15,7 @@ import graphviz
 from sklearn.tree import export_graphviz
 from subprocess import call
 import PIL
-import pdfkit
+
 
 app = Flask(__name__)
 
