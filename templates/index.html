@@ -711,9 +711,9 @@
                                 </div>
                                 <div class="card-body">
                                     <p><b>Generar un reporte en PDF:</b></p>
-                                    <button onclick="abrirtodo()">Generar Reporte</button><br>
+                                    <button onclick="generarReporte()">Generar Reporte</button><br>
                                     <p><b>Selecciona un archivo JSON para analizar la criticidad de los usuarios:</b></p>
-                                    &emsp;&emsp;<input id="image-file" type="file" onchange="SendUsers(this)" >
+                                    &emsp;&emsp;<input id="image-file" type="file" accept=".json" onchange="SendUsers(this)" >
 
 
 <br>
@@ -732,7 +732,7 @@
                                 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                                 <script>
 
-                                    const abrirtodo=()=>{
+                                    const generarReporte=()=>{
                                         clearInterval(intervalo)
                                         shortId("but").click()
                                         shortId("print").classList.toggle("sidebar-collapse", true)
@@ -742,7 +742,7 @@
                                             e.classList.toggle("collapsed-card", false)
                                         })
                                         const element = document.getElementById('all');
-                                        var opt = {
+                                        let opt = {
                                           margin:       1,
                                           filename:     'reporte.pdf',
                                           image:        { type: 'jpeg', quality: 0.98 },
@@ -751,11 +751,6 @@
                                         };
                                         html2pdf().set(opt).from(element).save()
                                         intervalo=setInterval(checkCVE, 20000)
-                                        //getPDF()
-
-                                        //.forEach((e)=>{
-                                        //    e.classList.toggle("collapsed-card", false
-                                        //})
                                     }
 
                                     const SendUsers=async (file)=>{
@@ -774,7 +769,7 @@
                                            const data = await r.json()
 
 
-
+                                            shortId("listhigh2").innerHTML="Vulnerables"
                                             shortId("titlelow2").classList.toggle("d-none", false)
                                             shortId("listhigh2").classList.toggle("d-none",false)
                                             shortId("titlehigh2").classList.toggle("d-none", false)
@@ -805,6 +800,9 @@
 
                                            console.log('HTTP response code:',r.status);
                                         } catch(e) {
+                                            let titulo = shortId("titlehigh2")
+                                            titulo.classList.toggle("d-none", false)
+                                            titulo.innerHTML="Error en el Archivo"
                                            console.log('Huston we have problem...:', e);
                                         }
                                     }

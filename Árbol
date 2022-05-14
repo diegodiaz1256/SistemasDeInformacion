@@ -10,7 +10,7 @@ edge [fontname="helvetica"] ;
 2 -> 3 ;
 4 [label="gini = 0.0\nsamples = 7\nvalue = [0, 7]"] ;
 3 -> 4 ;
-5 [label="X[1] <= 66.0\ngini = 0.444\nsamples = 3\nvalue = [1, 2]"] ;
+5 [label="X[0] <= 100.5\ngini = 0.444\nsamples = 3\nvalue = [1, 2]"] ;
 3 -> 5 ;
 6 [label="gini = 0.0\nsamples = 1\nvalue = [1, 0]"] ;
 5 -> 6 ;
